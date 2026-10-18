@@ -1,0 +1,242 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Kenechi Ucheagwu | Healthcare IT & Systems Automation';
+const description = 'Healthcare IT operations, systems automation, and selected projects by Kenechi Ucheagwu in Jersey City, NJ.';
+---
+
+<Base title={title} description={description} path="/" personJsonLd>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="hero-copy">
+        <h1>Kenechi Ucheagwu</h1>
+        <p class="hero-role">IT Operations & Systems Manager · Healthcare IT, Python automation, HIPAA-aware systems.</p>
+        <p class="lede">I run IT operations at a primary-care clinic: the network, the EHR (Elation, which I migrated us onto in January 2026), the security posture, and the billing systems that keep the lights on. Most of my recent work is Python automation around Elation and our payer portals: guarded billing-queue tools, eligibility checks, and an LLM-assisted medical coding pipeline wrapped in a deterministic validation layer. I'm also a nursing student, which means I understand the clinical workflows my systems serve, not just the servers they run on.</p>
+        <div class="link-row" aria-label="Profile links">
+          <a href="mailto:kacy.ucheagwu@gmail.com">Email</a>
+          <a href="https://github.com/DaDabbler">GitHub</a>
+          <a href="https://www.linkedin.com/in/kenechi-ucheagwu">LinkedIn</a>
+          <a href="/assets/resume.pdf" download>Resume</a>
+        </div>
+      </div>
+      <div class="terminal-card" aria-label="A terminal-style snapshot of Kenechi Ucheagwu's experience">
+        <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="terminal-body">
+          <p data-boot-line><span class="prompt">$</span> whoami</p>
+          <p data-boot-line>it-ops · medical biller · bsn student</p>
+          <p data-boot-line><span class="prompt">$</span> uptime</p>
+          <p data-boot-line>one clinic, five roles, since 2017</p>
+          <p data-boot-line><span class="prompt">$</span> systemctl status billing-pipeline</p>
+          <p data-boot-line><span class="status-dot">●</span> active (running) — 21 rules loaded</p>
+          <p data-boot-line><span class="prompt">$</span> tail -1 lessons.log</p>
+          <p data-boot-line>watchdogs must be dumber than what they watch</p>
+          <div class="terminal-log" role="log"></div>
+          <form class="terminal-form" data-terminal-form>
+            <label class="visually-hidden" for="term-in">Type a terminal command</label>
+            <span class="prompt terminal-input-prompt" aria-hidden="true">$</span>
+            <input id="term-in" name="command" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="type 'help' and press enter" />
+          </form>
+        </div>
+      </div>
+      <script is:inline>
+        (function () {
+          var body = document.querySelector('.terminal-body');
+          var form = document.querySelector('[data-terminal-form]');
+          if (!body || !form) return;
+          var input = form.querySelector('input');
+          var replies = {
+            help: "commands: whoami · uptime · status · rules · stack · incident · projects · contact · clear",
+            whoami: "it-ops · medical biller · bsn student",
+            uptime: "one clinic, five roles, since 2017",
+            status: "● active (running) — 21 rules loaded",
+            rules: "new-vs-established mismatch · age-band checks · date-of-service validity · modifier repair · ghost-line cleanup · +16 more",
+            stack: "python · chrome devtools protocol · playwright · sqlite · powershell · astro",
+            incident: "jul 5: retry loop, $57 in one day. fix: loop breaker + a deterministic spend tripwire.",
+          };
+          var commands = Object.keys(replies).concat(['projects', 'contact', 'clear']);
+
+          var card = body.closest('.terminal-card');
+          var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (card) card.classList.add('terminal-ready');
+          if (card && !reduceMotion) {
+            var bootLines = body.querySelectorAll('[data-boot-line]');
+            card.classList.add('terminal-booting');
+            bootLines.forEach(function (line, index) {
+              window.setTimeout(function () { line.classList.add('is-visible'); }, 120 * (index + 1));
+            });
+            window.setTimeout(function () { card.classList.remove('terminal-booting'); }, 1200);
+          }
+
+          input.addEventListener('keydown', function (e) {
+            if (e.key !== 'Tab' || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
+            var value = input.value.trim().toLowerCase();
+            if (!value) return;
+            var match = commands.find(function (command) { return command.indexOf(value) === 0; });
+            if (match && match !== input.value) {
+              e.preventDefault();
+              input.value = match;
+            }
+          });
+
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var cmd = input.value.trim().toLowerCase();
+            input.value = '';
+            if (!cmd) return;
+            if (cmd === 'clear') {
+              body.querySelectorAll('.terminal-log .term-x').forEach(function (n) { n.remove(); });
+              return;
+            }
+            var echo = document.createElement('p');
+            echo.className = 'term-x';
+            var p = document.createElement('span');
+            p.className = 'prompt';
+            p.textContent = '$';
+            echo.append(p, ' ' + cmd);
+            var out = document.createElement('p');
+            out.className = 'term-x term-out';
+            if (cmd === 'projects') {
+              var slugs = ['elation-billing-automation', 'billing-pipeline', 'vitals-bridge', 'homelab', 'phi-guardrails'];
+              out.append('cd /projects → ');
+              slugs.forEach(function (slug, i) {
+                var a = document.createElement('a');
+                a.href = '/projects/' + slug + '/';
+                a.textContent = slug;
+                if (i) out.append(' · ');
+                out.append(a);
+              });
+              var more = document.createElement('a');
+              more.href = '#projects';
+              more.textContent = 'all projects';
+              out.append(' · ', more);
+            } else if (cmd === 'sudo hire-me' || cmd === 'sudo hire me') {
+              var h = document.createElement('a');
+              h.href = 'mailto:kacy.ucheagwu@gmail.com';
+              h.textContent = 'kacy.ucheagwu@gmail.com';
+              out.append('permission granted → ', h);
+            } else if (cmd === 'contact') {
+              var m = document.createElement('a');
+              m.href = 'mailto:kacy.ucheagwu@gmail.com';
+              m.textContent = 'kacy.ucheagwu@gmail.com';
+              out.append('email → ', m);
+            } else {
+              out.textContent = replies[cmd] || ("command not found: " + cmd + " — try 'help'");
+            }
+            body.querySelector('.terminal-log').append(echo, out);
+            out.scrollIntoView({ block: 'nearest' });
+          });
+        })();
+      </script>
+    </div>
+    <a class="scroll-cue" href="#at-a-glance">↓ more</a>
+  </section>
+
+  <section class="section stats-section" id="at-a-glance" aria-labelledby="stats-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <p class="eyebrow">01 · at a glance</p>
+        <h2 id="stats-heading">At a glance</h2>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-value">Jan 2026</span>
+          <span class="stat-label">led the clinic's EHR move from Amazing Charts to Elation, through cutover and staff training</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">21</span>
+          <span class="stat-label">deterministic validation rules screening every AI-coded claim</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">172</span>
+          <span class="stat-label">claims coded, repaired, and shipped in one batch session</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects" aria-labelledby="projects-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <p class="eyebrow">02 · selected projects</p>
+        <h2 id="projects-heading">Selected projects</h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card project-card--flagship">
+          <div class="project-meta"><span class="project-index">01</span><span class="project-tag">in production</span></div>
+          <h3>Elation migration and daily billing tools</h3>
+          <p>I led our January 2026 move from Amazing Charts to Elation, then built the tools the billing office runs on it every day: guarded queue tools, claim checks, pricing guards and front-desk eligibility summaries, with dry runs and an audit trail.</p>
+          <a class="project-link" href="/projects/elation-billing-automation/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--flagship">
+          <div class="project-meta"><span class="project-index">02</span><span class="project-tag">in production</span></div>
+          <h3>LLM-assisted medical coding pipeline</h3>
+          <p>An LLM proposes CPT and ICD-10 codes for clinic visits. A 21-rule validation layer flags what it gets wrong, and a human approves what it gets right. Built solo; in production at a primary-care clinic, driving Elation's web app.</p>
+          <a class="project-link" href="/projects/billing-pipeline/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--flagship">
+          <div class="project-meta"><span class="project-index">03</span><span class="project-tag">prototype</span></div>
+          <h3>Vitals-monitor-to-EHR bridge</h3>
+          <p>A Welch Allyn vitals monitor, a free vendor translator, and a hand-built HL7/MLLP bridge designed to land readings in the chart without retyping. 65 tests green; showed that five-figure central-station middleware wasn't needed.</p>
+          <a class="project-link" href="/projects/vitals-bridge/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--flagship">
+          <div class="project-meta"><span class="project-index">04</span><span class="project-tag">personal project</span></div>
+          <h3>Self-hosted AI agent homelab</h3>
+          <p>A fleet of scheduled agents on an always-on workstation, with a hardened Raspberry Pi as the infrastructure node: email triage, knowledge filing, self-healing ops. Includes the $57 incident that taught me why watchdogs must be dumber than the things they watch.</p>
+          <a class="project-link" href="/projects/homelab/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">05 · in production</span>
+          <h3>PHI guardrails</h3>
+          <p>A scanner, a fail-closed pre-commit hook, and a no-literals policy that make it structurally hard for patient identifiers to reach version control. Every pattern hit triaged to a tree that scans clean.</p>
+          <a class="project-link" href="/projects/phi-guardrails/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">06 · in production</span>
+          <h3>Refreshing the clinic website</h3>
+          <p>I refreshed Urban Medical Center's service pages, booking and printable intake forms, with a hardened contact endpoint and shared accepted-plan copy.</p>
+          <a class="project-link" href="/projects/clinic-website/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">07 · in production</span>
+          <h3>Separate AI work sessions</h3>
+          <p>I split office work into sessions with defined roles, a coordinator, checkpoint restore, a shared status log and token budgets. Checkpoints cut per-call context by more than half.</p>
+          <a class="project-link" href="/projects/multi-session-agents/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">08 · in production · gate in staging</span>
+          <h3>Claude and Codex handoff tooling</h3>
+          <p>Wrappers that count a job as done only when its result is verified, plus live status, cancellation, same-thread follow-up and a local usage meter.</p>
+          <a class="project-link" href="/projects/ai-handoff-tooling/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">09 · pilot · delivered to USB</span>
+          <h3>Waiting-room video loop</h3>
+          <p>I built a scripted pipeline from HTML slides to a 1080p loop, with safe-area checks, crossfades and USB output ready for a TV playback pilot.</p>
+          <a class="project-link" href="/projects/waiting-room-slideshow/">Read the case study</a>
+        </article>
+        <article class="project-card project-card--secondary">
+          <span class="project-tag">10 · personal project</span>
+          <h3>home-agent</h3>
+          <p>A voice-driven personal agent on my own workstation: local speech-to-text and a tool registry for files, media, and system control.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact-section" aria-labelledby="contact-heading">
+    <div class="shell">
+      <div class="contact-strip">
+        <div>
+          <h2 class="visually-hidden" id="contact-heading">Get in touch</h2>
+          <p>Open to Healthcare IT and IT operations roles, and to patient care roles while I finish my BSN. Remote or NYC/NJ.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="button" href="mailto:kacy.ucheagwu@gmail.com">Email</a>
+          <a href="https://github.com/DaDabbler">GitHub</a>
+          <a href="https://www.linkedin.com/in/kenechi-ucheagwu">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

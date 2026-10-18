@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Keeping patient data out of git · Kenechi Ucheagwu';
+const description = 'A concise case study on layered repository guardrails for keeping patient identifiers out of source control.';
+---
+
+<Base title={title} description={description} path="/projects/phi-guardrails/">
+  <header class="page-header page-header--lean">
+    <div class="shell">
+      <h1>Keeping patient data out of git</h1>
+      <p class="case-lede">Clinic automation grows the same way everywhere: a one-off script for today's problem, another for tomorrow's. The classic failure mode is that quick scripts accumulate identifiers in their source, and source ends up in version control. I decided to make that structurally impossible in our repos instead of relying on carefulness.</p>
+    </div>
+  </header>
+
+  <article class="article article--lean shell">
+    <section class="article-section" id="layers">
+      <h2><span class="section-count" aria-hidden="true">01</span><span>What I built</span></h2>
+      <p>Three layers. A scanner that recognizes identifier shapes (dates of birth, member-ID formats, SSN patterns, name-adjacent context) with an explicit allowlist for synthetic test fixtures, so fake data has to be declared fake rather than pattern-matched as fine. A pre-commit hook that runs the scanner on every staged change and refuses the commit on any hit, fail-closed. And a repo policy that moves anything identifier-shaped out of code into gitignored data files behind a loader, so scripts take inputs instead of embedding them.</p>
+    </section>
+
+    <section class="article-section" id="sweep">
+      <h2><span class="section-count" aria-hidden="true">02</span><span>The sweep</span></h2>
+      <p>Turning the scanner on an existing multi-year repo is humbling: every pattern hit had to be triaged: a mix of synthetic fixtures to allowlist, false positives to tune out, and scripts to refactor onto the loader pattern. The tree now scans clean, and the hook keeps it that way on every commit since.</p>
+    </section>
+
+    <section class="article-section" id="limits">
+      <h2><span class="section-count" aria-hidden="true">03</span><span>Honest limits</span></h2>
+      <p>A hook is one control, not a guarantee: hooks can be bypassed and patterns miss things. That's why it's the last layer instead of the only one: production data lives outside the repo entirely, fixtures are synthetic by policy, and the scanner also runs in full-tree mode on demand. Defense in depth, sized for a small clinic.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2><span class="section-count" aria-hidden="true">04</span><span>Stack</span></h2>
+      <p>Python, regex-and-context pattern rules, a git pre-commit hook, and a full-tree audit mode.</p>
+    </section>
+  </article>
+</Base>

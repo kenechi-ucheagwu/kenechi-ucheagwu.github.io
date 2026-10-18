@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import { readFileSync } from 'node:fs';
+
+const title = 'Teaching an LLM to code medical claims, safely · Kenechi Ucheagwu';
+const description = 'A case study on combining LLM code suggestions, deterministic rules, and human review for safer medical billing automation.';
+const billingDiagram = readFileSync(new URL('../../../public/diagrams/billing-pipeline.svg', import.meta.url), 'utf8');
+---
+
+<Base title={title} description={description} path="/projects/billing-pipeline/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Teaching an LLM to code medical claims, safely</h1>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="article-section" id="context">
+      <h2><span class="section-count" aria-hidden="true">01</span><span>Context</span></h2>
+      <p>I'm both the IT manager and the medical biller at a primary-care clinic. Every visit produces a superbill that needs CPT and ICD-10 codes before it can become a claim. Manual coding is slow and repetitive, and mistakes surface weeks later as denials that cost real money and rework. This page covers the coding step; the queue, eligibility and audit tools around it are in <a href="/projects/elation-billing-automation/">Elation migration and daily billing tools</a>.</p>
+    </section>
+
+    <section class="article-section" id="problem">
+      <h2><span class="section-count" aria-hidden="true">02</span><span>The problem</span></h2>
+      <p>One person cannot hand-code every visit for a busy clinic and also run its IT. I needed throughput without giving up accuracy, and any automation had to survive contact with healthcare's regulatory reality.</p>
+    </section>
+
+    <section class="article-section" id="one-claim">
+      <h2><span class="section-count" aria-hidden="true">03</span><span>One claim, end to end</span></h2>
+      <p>Here's a synthetic but typical run. An established adult patient comes in for an annual physical plus a medication follow-up. The model reads the visit documentation and proposes codes in about five seconds: an office-visit code, a preventive-visit code, and four diagnosis codes. One problem: it picked the new-patient preventive code, and this patient is established. That exact mismatch is an automatic denial. Rule set loaded, the post-processor flags it, swaps in the established-patient equivalent, logs the correction, and adds the visit-level modifier the combo visit needs. The claim lands in my review queue with every change highlighted. I check it against the note and approve. Machine time: seconds. The same catch by hand is a several-minute review, and it's exactly the kind of detail tired eyes miss on claim forty of the day.</p>
+    </section>
+
+    <section class="article-section" id="architecture">
+      <h2><span class="section-count" aria-hidden="true">04</span><span>Architecture</span></h2>
+      <div class="diagram-wrap billing-diagram-wrap">
+        <div class="diagram diagram-inline" tabindex="0" aria-label="Scrollable billing pipeline architecture diagram" set:html={billingDiagram}>
+        </div>
+        <p class="diagram-caption">
+          <span class="cap-default">hover a stage · click to jump</span>
+          <span class="cap cap-1">raw note text: the model's only input</span>
+          <span class="cap cap-2">proposes procedure + diagnosis codes in 3-6s</span>
+          <span class="cap cap-3">21 rules; where the 22 miscoded claims got caught</span>
+          <span class="cap cap-4">a human approves every claim, always</span>
+          <span class="cap cap-5">staged first, nothing goes straight out</span>
+          <span class="cap cap-6">final automated check before the door</span>
+          <span class="cap cap-7">out the door</span>
+        </p>
+      </div>
+      <p class="diagram-link"><a href="/diagrams/billing-pipeline.svg">Open full size</a></p>
+      <p>Visit documentation goes to an LLM that proposes procedure and diagnosis codes. The proposal is never trusted directly. It passes through a post-processor of 21 deterministic rules built from observed failure modes: the things language models reliably get wrong here: age-inappropriate codes, new-versus-established patient mismatches, diagnosis codes that are invalid for the date of service, modifiers that must be added or stripped, and codes that leak into the wrong field. Whatever survives goes into a human review queue. I approve, correct, or reject each one, and submission itself is two-phase with a final automated audit before anything reaches the clearinghouse.</p>
+      <p>For throughput, four isolated browser sessions work batches in parallel, with authenticated session state synced from a single source instance.</p>
+    </section>
+
+    <section class="article-section" id="constraints">
+      <h2><span class="section-count" aria-hidden="true">05</span><span>Constraints</span></h2>
+      <ul>
+        <li>HIPAA first. Patient identifiers never enter source control or logs, the pipeline runs on clinic-controlled machines inside the clinic's own authenticated sessions, and nothing goes out the door without human review.</li>
+        <li>Solo operator: no second pair of eyes, so the process itself has to catch mistakes. Every script supports dry runs, runs a small batch of 3-5 before a full batch, and verifies state after every mutation.</li>
+        <li>A live EHR web app with real-world quirks and rate limits.</li>
+        <li>No budget. This replaced software that clinics twice our size pay five figures a year for.</li>
+        <li>Test fixtures are synthetic, production data stays out of the repo by design, and a pre-commit scan rejects known patient-data patterns as a backstop, one layer of several, not a guarantee.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="lessons">
+      <h2><span class="section-count" aria-hidden="true">06</span><span>What building it taught me</span></h2>
+      <p>The model choice surprised me. The well-reviewed reasoning model took 2-5 minutes per claim and returned broken JSON about a third of the time in my testing; a boring, fast completion model returns in 3-6 seconds and its JSON has been reliable in production use. The pipeline doesn't need the model to be brilliant, because the rules layer supplies the rigor. It needs the model to be consistent.</p>
+      <p>I also stopped prompt-engineering my way toward a perfect model and started writing rules I could unit-test. Every denial category we'd actually seen became a named, testable check. And the human review step is permanent, not a crutch to remove later: in medical billing the cost of a wrong claim is wildly asymmetric to the cost of a review click.</p>
+      <p>The strongest validation so far was a blind comparison: on a sample of visits the pipeline's code suggestions matched the human coder's choices exactly on every procedure code, and flagged one compliance issue the human pass had missed. The billing repository it lives in now collects over 14,000 automated tests.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2><span class="section-count" aria-hidden="true">07</span><span>Stack</span></h2>
+      <p>Python, browser automation against Elation's web app over the Chrome DevTools Protocol, an LLM API for code suggestion, and a rules engine with a test suite.</p>
+    </section>
+
+    <section class="article-section" id="outcome">
+      <h2><span class="section-count" aria-hidden="true">08</span><span>Outcome</span></h2>
+      <ul>
+        <li>One documented batch session: 172 claims coded, repaired, and shipped to the clearinghouse, including 314 malformed charge lines fixed automatically.</li>
+        <li>Hand-coding and cleaning up 172 claims is roughly two days of focused work. Reviewing the pipeline's output for that batch took an afternoon.</li>
+        <li>A single validation rule caught 22 miscoded claims before they went out.</li>
+        <li>Known denial patterns get flagged before submission instead of surfacing weeks after.</li>
+        <li>92 documented coding scenarios drive the suggestion layer, each validated against the code database.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="differently">
+      <h2><span class="section-count" aria-hidden="true">09</span><span>What I'd do differently</span></h2>
+      <p>I'd move the parallel browser workers to isolated contexts in a single browser instance instead of four separate ones. One browser is easier to keep signed in, and a crash takes down one context instead of a whole session.</p>
+    </section>
+  </article>
+</Base>

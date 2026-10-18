@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Refreshing the clinic website · Kenechi Ucheagwu';
+const description = 'A practice website refresh with local-search pages, booking, printable intake forms and a hardened contact endpoint.';
+---
+
+<Base title={title} description={description} path="/projects/clinic-website/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Refreshing the clinic website</h1>
+      <p class="subtitle project-status">in production</p>
+      <p class="case-lede">I refreshed Urban Medical Center's website around the things someone needs before a visit: services, accepted plans, booking and intake paperwork. The work ran from July through October, with changes to the shared design, contact endpoint and printed forms. The site is live at <a href="https://www.urbanmds.com">urbanmds.com</a>.</p>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="article-section" id="problem">
+      <h2>The problem</h2>
+      <p>The old site listed the wrong accepted insurance plans and had a contact form that bots could abuse. New patients also needed intake paperwork they could open on a phone and print cleanly.</p>
+    </section>
+
+    <section class="article-section" id="changes">
+      <h2>How the refresh grew</h2>
+      <div class="timeline">
+        <p><strong>July</strong>I revised the homepage and added CSS and SVG service-icon motion that respects reduced-motion preferences.</p>
+        <p><strong>Early September</strong>I refreshed the header, footer and shared buttons and visit cards across the site.</p>
+        <p><strong>Late September</strong>I added service pages, server-rendered FAQs, structured data, larger tap targets and a map that loads on request.</p>
+        <p><strong>October</strong>I moved accepted-plan copy into a shared source matched to an evidence-checked participation list.</p>
+      </div>
+    </section>
+
+    <section class="article-section" id="visit">
+      <h2>Booking and paperwork</h2>
+      <p>Website booking uses a dedicated appointment type in Elation so those appointments stay separate from walk-ins. Telehealth booking is for established patients.</p>
+      <p>The intake packet has labelled fields, a mobile layout and blank printing that works on iOS. It can be returned by fax or in person. I treated the printed page as part of the visit preparation, alongside the screen layout.</p>
+    </section>
+
+    <section class="article-section" id="contact">
+      <h2>The contact endpoint</h2>
+      <ul>
+        <li>Only requests from the clinic's own domains are accepted.</li>
+        <li>A hidden field catches bots before they count against the rate limit, and a minimum fill time catches scripted submissions.</li>
+        <li>A per-visitor rate limit caps repeat sends.</li>
+        <li>The reply address is checked so it can't be used to inject email headers, and the confirmation never repeats what the visitor typed.</li>
+        <li>Mail goes out through the Gmail API with send-only permission, and the key lives in the hosting settings, not the code.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="result">
+      <h2>Result</h2>
+      <p>The refreshed site is live at urbanmds.com. Online bookings arrive as their own appointment type, separate from walk-ins, and the accepted-plan list on every page now comes from one source checked against participation evidence.</p>
+    </section>
+
+    <section class="article-section" id="limits">
+      <h2>Known limits</h2>
+      <p>The rate limiter keeps its counts in memory, so it holds within one server instance, not across all of them. A shared store would close that gap.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2>Stack</h2>
+      <p>Next.js 16 App Router, React 19, TypeScript, Tailwind v4, pnpm, Vercel and googleapis.</p>
+    </section>
+  </article>
+</Base>
