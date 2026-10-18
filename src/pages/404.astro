@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Page not found · Kenechi Ucheagwu';
+const description = 'The requested page could not be found.';
+---
+
+<Base title={title} description={description} path="/404.html" noIndex>
+  <section class="not-found shell">
+    <div class="not-found-terminal">
+      <div class="terminal-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="terminal-body">
+        <p><span class="prompt">$</span> curl -I /this-page</p>
+        <h1>HTTP/2 404</h1>
+        <p><span class="prompt">$</span> <a href="/">cd ~</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

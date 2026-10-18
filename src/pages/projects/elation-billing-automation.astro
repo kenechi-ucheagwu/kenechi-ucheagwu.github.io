@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Elation migration and daily billing tools · Kenechi Ucheagwu';
+const description = 'An EHR migration to Elation, then guarded billing queues, claim checks, eligibility summaries and audit trails built around Elation’s web app.';
+---
+
+<Base title={title} description={description} path="/projects/elation-billing-automation/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Elation migration and daily billing tools</h1>
+      <p class="subtitle project-status">in production</p>
+      <p class="case-lede">I run IT and billing for a primary care practice in Jersey City. In January 2026 I led our move from Amazing Charts to Elation: data migration, vendor coordination, cutover and staff training, with no disruption to care. Once we were live, I built an automation layer around Elation's web app to check claims before queueing, make eligibility results readable at the front desk, and keep a record of each proposed change. These tools are part of the practice's daily work. The LLM coding step has <a href="/projects/billing-pipeline/">its own case study</a>.</p>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="article-section" id="problem">
+      <h2>The problem</h2>
+      <p>I am the practice's only biller. Claims could go out with missing modifiers, unpriced charge lines or out-of-date coverage. Front-desk staff had no quick way to read copay, deductible and other-insurance details from an eligibility response. And in manual queue work, one repeated click could queue the same claim twice.</p>
+    </section>
+
+    <section class="article-section" id="queue">
+      <h2>The queue, with stopping points</h2>
+      <ol>
+        <li><strong>Preview.</strong> Queue tools run dry by default. A live run needs a recent dry run made with the same settings.</li>
+        <li><strong>Check.</strong> I read the queued state before acting. If the state can't be read, the claim is skipped. A job database and per-claim locks keep the same claim from being worked twice.</li>
+        <li><strong>Queue and verify.</strong> I start with a small batch. The tool records intent before clicking in its own browser tab, then verifies each write. An unverified write stops the run, and a circuit breaker stops batch work on gateway errors.</li>
+        <li><strong>Review.</strong> Biller review and global queue submission stay with me. The queue tool never performs global submit.</li>
+      </ol>
+    </section>
+
+    <section class="article-section" id="checks">
+      <h2>Claim checks and pricing guards</h2>
+      <p>The production pre-queue validator runs 14 checks, including blank charge lines and missing diagnosis pointers. A pricing guard blocks unpriced lines and checks again before each write. I keep proposed, applied and reviewed changes in a permanent audit trail.</p>
+      <ul>
+        <li><strong>Built, used in audits:</strong> a CMS NCCI procedure-bundling check.</li>
+        <li><strong>Built:</strong> CPT and ICD-10 date-of-service validators, plus a fee-schedule drift guard. These are in the codebase but not yet wired into the daily queue run.</li>
+        <li><strong>Prototype:</strong> an Elation REST API client. Production automation uses the web app over the Chrome DevTools Protocol.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="eligibility">
+      <h2>A front-desk view of benefits</h2>
+      <p>I parse electronic 270/271 eligibility responses into a view of copay, coinsurance, deductible, out-of-pocket amounts and plan dates. The parser prefers the office-visit benefit row so an emergency-room copay does not appear as an office copay.</p>
+      <p>The dashboard separates active coverage, no coverage, ambiguity and failed lookups. An unchecked result stays unknown. Staff can accept, edit or reject a result, with decisions logged. Coordination-of-benefits and chart-versus-payer checks detect discrepancies; changes that overwrite existing fields require human confirmation, and claim routing is never automatic.</p>
+    </section>
+
+    <section class="article-section" id="evidence">
+      <h2>Evidence and boundaries</h2>
+      <p>The repository has 14,000+ automated tests, based on pytest collection on October 3, 2026, plus extension test suites. The offline runner blocks production connections, environment-file loading and child processes.</p>
+      <p>Append-only, tamper-evident audit logging records intent and verification. Output guards require encrypted storage, and repository gates check for identifiers before commits. I keep global claim submission, sends, sign-ins and two-factor authentication under human control.</p>
+    </section>
+
+    <section class="article-section" id="result">
+      <h2>Result</h2>
+      <p>The eligibility dashboard has run on the front-desk computer since August 17, 2026. The 14-check validator and the pricing guard are part of the daily queue run. I have made 593 commits to the repository since July 1, 2026.</p>
+    </section>
+
+    <section class="article-section" id="next">
+      <h2>What's next</h2>
+      <p>The date-of-service validators and the fee-schedule drift guard are built and tested but not yet part of the daily run. Wiring them in is the next step.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2>Stack</h2>
+      <p>Python, Chrome DevTools Protocol, Playwright, SQLite for audit and job state, pytest, a plain-JavaScript Chrome extension with Node test suites, and PowerShell launchers.</p>
+    </section>
+  </article>
+</Base>

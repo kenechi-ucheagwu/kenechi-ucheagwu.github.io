@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Verified handoffs between Claude and Codex · Kenechi Ucheagwu';
+const description = 'Worker dispatch, live status, verified results, cancellation and same-thread follow-up, with a local usage meter.';
+---
+
+<Base title={title} description={description} path="/projects/ai-handoff-tooling/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Verified handoffs between Claude and Codex</h1>
+      <p class="subtitle project-status">in production · job-store data gate is a staging prototype</p>
+      <p class="case-lede">I use Claude and Codex for bounded work, with a coordinator responsible for collecting the result. I built wrappers so that dispatch, status, cancellation and follow-up refer to the exact job. A worker saying it is done is only part of the evidence.</p>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="article-section" id="problem">
+      <h2>The problem</h2>
+      <p>With two AI vendors and one coordinator, "the worker said it's done" was being taken as success. A follow-up could resume the wrong conversation, a job whose runner had died could sit forever, and finished jobs left helper processes running.</p>
+    </section>
+
+    <section class="article-section" id="contract">
+      <h2>The job contract</h2>
+      <ul>
+        <li><strong>Dispatch:</strong> explicit model and effort settings, with a receipt for the job.</li>
+        <li><strong>Live status:</strong> progress and runner identity, including a stale state when the runner has died.</li>
+        <li><strong>Collect:</strong> success requires a completed, verified job in the right workspace, started after dispatch, with matching conversation and turn identities and a successful exit.</li>
+        <li><strong>Cancel:</strong> stop the exact job and retain the conversation identity for an intentional follow-up.</li>
+        <li><strong>Follow up:</strong> resume the saved conversation with matching settings. A mismatched candidate is refused.</li>
+      </ul>
+      <p>The wrappers work in both directions. A usage-limit stop returns a waiting state with the meter's reset time. It does not automatically retry or dispatch another job. When a job finishes, its helper processes are shut down through a checked path.</p>
+    </section>
+
+    <section class="article-section" id="isolation">
+      <h2>Isolation and deployment status</h2>
+      <p><strong>In production:</strong> work declares its data class, and secrets are refused. Sensitive work uses an isolated lane with tighter controls and encrypted local storage. Status checks return only basic job information and where the result is stored, never the result itself.</p>
+      <p><strong>Prototype, staging only:</strong> a data gate scans job files when a job starts and after it runs. Anything it flags is moved to protected storage with a verified copy, and the original job can still retrieve it. This gate is not deployed in the live handoff folder.</p>
+      <p>I retain human approval for global claim submission, sends, sign-ins and two-factor authentication. A verified worker result goes to me for review, and those actions still wait for my approval.</p>
+    </section>
+
+    <section class="article-section" id="meter">
+      <h2>A local usage meter</h2>
+      <p>The meter reads Codex rate-limit events from session logs and Claude status-line snapshots. For desktop usage, it estimates from transcript token counts anchored to the app's usage card. It writes pace and soft-stop flags atomically, without credentials, account API calls or model calls.</p>
+    </section>
+
+    <section class="article-section" id="result">
+      <h2>Result</h2>
+      <p>Through September 27, 2026, the wrappers ran 228 Codex jobs. Five died at launch; they now show as stale instead of hanging. About 47 leaked process trees led to the automatic cleanup above. 161 automated tests cover the live wrappers.</p>
+    </section>
+
+    <section class="article-section" id="lessons">
+      <h2>Lessons</h2>
+      <p>Dead runners and leaked broker processes made lifecycle checks necessary. I tied collection and cleanup to job and process identity, then made follow-up refuse a conversation mismatch. The coordinator can now distinguish a verified result from a stale job and choose the next action with that evidence in hand.</p>
+    </section>
+
+    <section class="article-section" id="next">
+      <h2>What's next</h2>
+      <p>The data gate passes 97 tests in staging. Deploying it to the live handoff folder is the next step.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2>Stack</h2>
+      <p>PowerShell wrappers, Python bridges and verification, Node for broker shutdown, and the official Claude Code CLI and Codex plugin and CLI on subscription logins.</p>
+    </section>
+  </article>
+</Base>

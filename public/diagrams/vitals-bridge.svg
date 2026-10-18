@@ -1,0 +1,167 @@
+<svg class="architecture-diagram vitals-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" aria-labelledby="vitals-title vitals-desc" preserveAspectRatio="xMidYMid meet">
+  <title id="vitals-title">Vitals bridge data path</title>
+  <desc id="vitals-desc">Interactive stages show a vitals monitor feeding a free vendor translator, an HL7 and MLLP bridge service, and the EHR vitals API, with a tablet capture fallback feeding the same bridge.</desc>
+  <style>
+    .vitals-diagram {
+      --diagram-text: #172321;
+      --diagram-surface: #ffffff;
+      --diagram-soft: #e8f5f2;
+      --diagram-accent: #0a5f58;
+      --diagram-muted: #40524f;
+      --diagram-flow-fallback: #607873;
+      color: var(--text, var(--diagram-text));
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .vitals-diagram {
+        --diagram-text: #edf5f2;
+        --diagram-surface: #151f1d;
+        --diagram-soft: #153b37;
+        --diagram-accent: #79eedb;
+        --diagram-muted: #b3c3be;
+        --diagram-flow-fallback: #8fa7a1;
+      }
+    }
+
+    .vitals-diagram .vitals-box {
+      fill: var(--surface, var(--diagram-surface));
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .vitals-diagram .vitals-emphasis {
+      fill: var(--accent-soft, var(--diagram-soft));
+      stroke: var(--accent-strong, var(--diagram-accent));
+      stroke-width: 3;
+    }
+
+    .vitals-diagram .vitals-flow,
+    .vitals-diagram .vitals-branch {
+      fill: none;
+      stroke: var(--diagram-flow, var(--diagram-flow-fallback));
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 3;
+      marker-end: url(#vitals-arrow);
+    }
+
+    .vitals-diagram .vitals-branch {
+      stroke-dasharray: 7 9;
+    }
+
+    .vitals-diagram .vitals-heading {
+      fill: currentColor;
+      font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .vitals-diagram .vitals-item {
+      fill: var(--muted, var(--diagram-muted));
+      font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .vitals-diagram .vitals-protocol {
+      fill: var(--accent-strong, var(--diagram-accent));
+      font: 700 14px "Cascadia Code", Consolas, monospace;
+      text-anchor: middle;
+    }
+
+    .vitals-diagram .vitals-arrowhead {
+      fill: var(--diagram-flow, var(--diagram-flow-fallback));
+    }
+
+    .vitals-diagram .diagram-node {
+      color: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .vitals-diagram .diagram-node:hover rect,
+    .vitals-diagram .diagram-node:focus-visible rect {
+      fill: var(--accent-soft, var(--diagram-soft));
+      stroke: var(--accent-strong, var(--diagram-accent));
+      stroke-width: 4;
+    }
+
+    .vitals-diagram .diagram-node:focus-visible {
+      outline: 3px solid var(--accent, var(--diagram-accent));
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .vitals-diagram .vitals-flow,
+      .vitals-diagram .vitals-branch {
+        stroke-dasharray: 8 10;
+        animation: vitals-flow-march 14s linear infinite;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vitals-diagram *,
+      .vitals-diagram *::before,
+      .vitals-diagram *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @keyframes vitals-flow-march {
+      to { stroke-dashoffset: -36; }
+    }
+  </style>
+
+  <defs>
+    <marker id="vitals-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path class="vitals-arrowhead" d="M 1 1 L 9 5 L 1 9 z"></path>
+    </marker>
+  </defs>
+
+  <a class="diagram-node vitals-node n-1" href="/projects/vitals-bridge/#monitor">
+    <title>Vitals monitor: speaks a proprietary protocol and cannot talk to the EHR directly</title>
+    <rect class="vitals-box" x="25" y="80" width="170" height="92" rx="12"></rect>
+    <text class="vitals-heading" x="110" y="134">Vitals monitor</text>
+  </a>
+
+  <path class="vitals-flow" d="M195 126 H235"></path>
+  <a class="diagram-node vitals-node n-2" href="/projects/vitals-bridge/#path">
+    <title>Vendor translator: the free piece the sales path does not mention</title>
+    <rect class="vitals-box" x="235" y="80" width="200" height="92" rx="12"></rect>
+    <text class="vitals-heading" x="335" y="120">
+      <tspan x="335" dy="0">Vendor translator</tspan>
+      <tspan x="335" dy="25">(free)</tspan>
+    </text>
+  </a>
+
+  <path class="vitals-flow" d="M435 126 H530"></path>
+  <text class="vitals-protocol" x="482" y="105">
+    <tspan x="482" dy="0">HL7 ORU^R01</tspan>
+    <tspan x="482" dy="18">over MLLP</tspan>
+  </text>
+
+  <a class="diagram-node vitals-node n-3" href="/projects/vitals-bridge/#hard-parts">
+    <title>Bridge service: parse, validate units, deduplicate, commit to the outbox, then acknowledge</title>
+    <rect class="vitals-box vitals-emphasis" x="530" y="60" width="250" height="132" rx="12"></rect>
+    <text class="vitals-heading" x="655" y="105">Bridge service</text>
+    <text class="vitals-item" x="655" y="146">parser · unit safety · dedup · outbox</text>
+  </a>
+
+  <path class="vitals-flow" d="M780 126 H815"></path>
+  <a class="diagram-node vitals-node n-4" href="/projects/vitals-bridge/#hard-parts">
+    <title>EHR vitals API: strict contracts and no chart-number lookup, so the bridge keeps its own map</title>
+    <rect class="vitals-box" x="815" y="80" width="125" height="92" rx="12"></rect>
+    <text class="vitals-heading" x="877.5" y="119">
+      <tspan x="877.5" dy="0">EHR vitals</tspan>
+      <tspan x="877.5" dy="25">API</tspan>
+    </text>
+  </a>
+
+  <a class="diagram-node vitals-node n-5" href="/projects/vitals-bridge/#status">
+    <title>Tablet capture page: human-confirmed fallback using the same client underneath</title>
+    <rect class="vitals-box" x="230" y="330" width="220" height="92" rx="12"></rect>
+    <text class="vitals-heading" x="340" y="384">Tablet capture page</text>
+  </a>
+  <path class="vitals-branch" d="M450 376 H655 V192"></path>
+</svg>

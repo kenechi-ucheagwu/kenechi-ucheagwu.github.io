@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import { readFileSync } from 'node:fs';
+
+const title = 'A homelab that pages itself · Kenechi Ucheagwu';
+const description = 'A case study on self-hosted AI agents, deterministic SRE guardrails, resilient routing, and cost observability.';
+const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.svg', import.meta.url), 'utf8');
+---
+
+<Base title={title} description={description} path="/projects/homelab/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>A homelab that pages itself</h1>
+      <p class="subtitle">Self-hosted AI agents with SRE guardrails</p>
+      <p class="case-lede">Outside work I run a small fleet of self-hosted AI agents on an always-on Windows workstation, with a hardened Raspberry Pi handling infrastructure, connected over a mesh VPN. They triage my email, file notes into my knowledge base, watch tech news, draft routine documents, and keep each other healthy. It started as a convenience project and turned into the best systems education I've had. One boundary is non-negotiable: this fleet runs my personal automation only. Nothing from my employer's systems runs through it.</p>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="incident" id="incident">
+      <h2><span class="section-count" aria-hidden="true">01</span><span>The incident</span></h2>
+      <p class="incident-intro">Unattended agents that call paid APIs are a small SRE problem wearing a hobby costume. Here's the day that proved it.</p>
+      <div class="timeline">
+        <p><strong>July 5, morning.</strong> An agent hits a provider error and retries. The retry fails the same way. Every individual retry is locally reasonable; the loop as a whole is not, and nothing is watching the loop.</p>
+        <p><strong>Through the day.</strong> The cascade runs unattended: 30 million tokens, about $57 of API spend. No alert fires, because no alert exists. Nothing in the stack watched dollars.</p>
+        <p><strong>July 6.</strong> I find it in the usage dashboard, kill the loop, and start the postmortem. The uncomfortable part: every component behaved exactly as designed. The design was the bug.</p>
+        <p><strong>The next day's steady state: two API calls.</strong></p>
+      </div>
+      <figure class="spend-chart" tabindex="0" aria-label="Scrollable chart of daily API spend from July 3 through July 7">
+        <h3 id="spend-chart-title">One day of runaway spend</h3>
+        <svg viewBox="0 0 520 245" width="520" height="245" role="img" aria-labelledby="spend-chart-title spend-chart-desc">
+          <desc id="spend-chart-desc">Daily API spend from July 3 through July 7. July 5 reached about 57 dollars during the retry cascade; July 6 settled to two API calls. Other days round to zero.</desc>
+          <g class="spend-annotation">
+            <line class="spend-threshold" x1="48" y1="158" x2="456" y2="158"></line>
+            <text class="spend-threshold-label" x="344" y="147">spend tripwire · added after</text>
+          </g>
+          <line class="spend-baseline" x1="48" y1="190" x2="456" y2="190"></line>
+          <g class="spend-bars">
+            <path class="spend-bar" d="M70 188 Q70 186 72 186 H118 Q120 186 120 188 V190 H70 Z"><title>jul 3 — ordinary spend rounds to zero</title></path>
+            <path class="spend-bar" d="M122 188 Q122 186 124 186 H170 Q172 186 172 188 V190 H122 Z"><title>jul 4 — ordinary spend rounds to zero</title></path>
+            <path class="spend-bar" d="M174 39 Q174 35 178 35 H220 Q224 35 224 39 V190 H174 Z"><title>jul 5 — the cascade: ~$57</title></path>
+            <path class="spend-bar" d="M226 184 Q226 180 230 180 H272 Q276 180 276 184 V190 H226 Z"><title>jul 6 — steady state: 2 API calls</title></path>
+            <path class="spend-bar" d="M278 188 Q278 186 280 186 H326 Q328 186 328 188 V190 H278 Z"><title>jul 7 — ordinary spend rounds to zero</title></path>
+          </g>
+          <g class="spend-direct-labels">
+            <text x="199" y="25">$57</text>
+            <text x="251" y="174">2 API calls</text>
+          </g>
+          <g class="spend-axis-labels">
+            <text x="95" y="216">jul 3</text>
+            <text x="147" y="216">jul 4</text>
+            <text x="199" y="216">jul 5</text>
+            <text x="251" y="216">jul 6</text>
+            <text x="303" y="216">jul 7</text>
+          </g>
+        </svg>
+        <figcaption>daily API spend, early july. ordinary days round to zero.</figcaption>
+      </figure>
+    </section>
+
+    <section class="article-section" id="system">
+      <h2><span class="section-count" aria-hidden="true">02</span><span>The system it happened to</span></h2>
+      <div class="diagram-wrap homelab-diagram-wrap">
+        <div class="diagram diagram-inline" tabindex="0" aria-label="Scrollable self-hosted agent architecture diagram" set:html={homelabDiagram}>
+        </div>
+        <p class="diagram-caption">
+          <span class="cap-default">hover a stage · click to jump</span>
+          <span class="cap cap-1">heavy automation, dashboards, the spend tripwire</span>
+          <span class="cap cap-2">always-on, hardened, unprivileged account</span>
+          <span class="cap cap-3">private overlay between the two</span>
+          <span class="cap cap-4">fallback chains, circuit breakers, spend caps</span>
+          <span class="cap cap-5">any provider can fail; the local model is the floor</span>
+          <span class="cap cap-6">where the tripwire pages me</span>
+        </p>
+      </div>
+      <p class="diagram-link">The diagram shows the setup at the time of the incident; "Where it stands now" below covers what changed since. <a href="/diagrams/homelab.svg">Open full size</a></p>
+      <p>At the time of the incident, two gateways ran the fleet: the workstation handled heavy automation, and the Pi ran an always-on service under its own locked-down, unprivileged account. Every agent called models through a shared resilient router: an ordered fallback chain across several providers with a local model as the floor, circuit breakers with shared health state so that when one agent hits a provider's quota wall the whole fleet routes around it, and rolling per-backend spend caps.</p>
+    </section>
+
+    <section class="article-section" id="redesign">
+      <h2><span class="section-count" aria-hidden="true">03</span><span>The redesign</span></h2>
+      <p>The fix was not a smarter agent. It was dumber safeguards. Loop detection with a circuit breaker now sits at the gateway. A deterministic spend tripwire reads the usage database every 15 minutes and alerts on rolling-window thresholds; there is deliberately no LLM anywhere in the alert path, because a watchdog must not be able to fail the same way as the thing it watches. Providers that trip quota or spend limits get benched automatically, and the whole fleet routes around them through shared health state. Same lesson as my billing pipeline at work: let the model do the flexible part, and surround it with boring, testable enforcement.</p>
+      <p>The design goal: any single provider can be down, rate-limited, or benched without stopping the fleet.</p>
+    </section>
+
+    <section class="article-section" id="runs-today">
+      <h2><span class="section-count" aria-hidden="true">04</span><span>What runs today</span></h2>
+      <p>The scheduled fleet includes an IT-ops agent that runs every 15 minutes with tiered auto-fixes (snapshot, apply, verify, roll back on failure, two strikes then escalate to me), a medic agent that patches the other agents with test-gated commits and reverts anything that fails, a librarian that files knowledge into my vaults, and mail and calendar triage. A usage dashboard aggregates every token and dollar across 9 sources into one SQLite-backed view.</p>
+      <p>The Pi itself: key-only SSH, fail2ban, a default-deny firewall, automatic security updates, and services split across unprivileged users.</p>
+      <p><strong>Where it stands now (October 2026).</strong> The fleet has since been simplified. The agents run on the always-on workstation, and the Pi is an infrastructure node only: VPN routing, a watchdog, and backups, with no agents on it. Model use moved to two subscription plans with no pay-per-token API lane at all, which removes the runaway-spend failure mode this page is about. The local model's only job now is building search embeddings for my knowledge base.</p>
+      <p>Auto-fix with a receipt. The ops agent can restart services and clean stale state on its own, but every action is snapshotted, verified, rolled back on failure, and logged to an audit trail. Automation you can't audit is just a faster way to break things.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2><span class="section-count" aria-hidden="true">05</span><span>Stack</span></h2>
+      <p>Python, PowerShell, and Bash; systemd and Windows scheduled tasks; SQLite; a mesh VPN; Claude and Codex on subscription plans; a local embedding model via Ollama for knowledge-base search.</p>
+    </section>
+
+    <section class="article-section" id="outcome">
+      <h2><span class="section-count" aria-hidden="true">06</span><span>Outcome</span></h2>
+      <ul>
+        <li>The spend tripwire polls every 15 minutes, so runaway spend is now bounded to one polling window instead of unbounded.</li>
+        <li>Running today: two gateways, a dozen scheduled agents, and one dashboard aggregating token spend across 9 usage sources.</li>
+        <li>Alerting consolidated: seven separate notification streams collapsed into one daily fleet brief.</li>
+      </ul>
+    </section>
+
+    <section class="article-section" id="differently">
+      <h2><span class="section-count" aria-hidden="true">07</span><span>What I'd do differently</span></h2>
+      <p>Cost observability should have been component number one, not an afterthought bolted on after an incident. I'd also document as I build; this writeup exists because I had to reverse-engineer my own decisions from my notes.</p>
+    </section>
+  </article>
+</Base>

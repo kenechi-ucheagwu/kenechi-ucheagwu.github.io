@@ -1,0 +1,197 @@
+<svg class="architecture-diagram homelab-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760" width="760" height="760" aria-labelledby="homelab-title homelab-desc" preserveAspectRatio="xMidYMid meet">
+  <title id="homelab-title">Self-hosted agent homelab architecture</title>
+  <desc id="homelab-desc">Interactive nodes show a workstation gateway and hardened Raspberry Pi gateway connected over a mesh VPN, routing model requests through shared safeguards, and sending spend alerts to Telegram.</desc>
+  <style>
+    .homelab-diagram {
+      --diagram-text: #172321;
+      --diagram-surface: #ffffff;
+      --diagram-soft: #e8f5f2;
+      --diagram-accent: #0a5f58;
+      --diagram-muted: #40524f;
+      --diagram-flow-fallback: #607873;
+      color: var(--text, var(--diagram-text));
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .homelab-diagram {
+        --diagram-text: #edf5f2;
+        --diagram-surface: #151f1d;
+        --diagram-soft: #153b37;
+        --diagram-accent: #79eedb;
+        --diagram-muted: #b3c3be;
+        --diagram-flow-fallback: #8fa7a1;
+      }
+    }
+
+    .homelab-diagram .homelab-box {
+      fill: var(--surface, var(--diagram-surface));
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .homelab-diagram .homelab-emphasis {
+      fill: var(--accent-soft, var(--diagram-soft));
+      stroke: var(--accent-strong, var(--diagram-accent));
+      stroke-width: 3;
+    }
+
+    .homelab-diagram .homelab-flow,
+    .homelab-diagram .homelab-link,
+    .homelab-diagram .homelab-alert {
+      fill: none;
+      stroke: var(--diagram-flow, var(--diagram-flow-fallback));
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 3;
+    }
+
+    .homelab-diagram .homelab-flow,
+    .homelab-diagram .homelab-alert {
+      marker-end: url(#homelab-arrow);
+    }
+
+    .homelab-diagram .homelab-link {
+      marker-start: url(#homelab-arrow);
+      marker-end: url(#homelab-arrow);
+    }
+
+    .homelab-diagram .homelab-heading {
+      fill: currentColor;
+      font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .homelab-diagram .homelab-item {
+      fill: var(--muted, var(--diagram-muted));
+      font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      pointer-events: none;
+    }
+
+    .homelab-diagram .homelab-label {
+      fill: currentColor;
+      font: 600 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .homelab-diagram .homelab-accent-label {
+      fill: var(--accent-strong, var(--diagram-accent));
+      font: 700 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .homelab-diagram .homelab-arrowhead {
+      fill: var(--diagram-flow, var(--diagram-flow-fallback));
+    }
+
+    .homelab-diagram .diagram-node {
+      color: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .homelab-diagram .diagram-node:hover rect,
+    .homelab-diagram .diagram-node:focus-visible rect {
+      fill: var(--accent-soft, var(--diagram-soft));
+      stroke: var(--accent-strong, var(--diagram-accent));
+      stroke-width: 4;
+    }
+
+    .homelab-diagram .diagram-node:focus-visible {
+      outline: 3px solid var(--accent, var(--diagram-accent));
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .homelab-diagram .homelab-flow,
+      .homelab-diagram .homelab-link,
+      .homelab-diagram .homelab-alert {
+        stroke-dasharray: 8 10;
+        animation: homelab-flow-march 14s linear infinite;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .homelab-diagram *,
+      .homelab-diagram *::before,
+      .homelab-diagram *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @keyframes homelab-flow-march {
+      to { stroke-dashoffset: -36; }
+    }
+  </style>
+
+  <defs>
+    <marker id="homelab-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path class="homelab-arrowhead" d="M 1 1 L 9 5 L 1 9 z"></path>
+    </marker>
+  </defs>
+
+  <a class="diagram-node homelab-node n-1" href="/projects/homelab/#runs-today">
+    <title>Workstation gateway: heavy automation, dashboards, and the spend tripwire</title>
+    <rect class="homelab-box" x="20" y="35" width="330" height="215" rx="12"></rect>
+    <text class="homelab-heading" x="185" y="72">Workstation gateway</text>
+    <text class="homelab-item" x="58" y="118">• scheduled agents</text>
+    <text class="homelab-item" x="58" y="158">• usage dashboard</text>
+    <text class="homelab-item" x="58" y="198">• spend tripwire</text>
+  </a>
+
+  <a class="diagram-node homelab-node n-2" href="/projects/homelab/#runs-today">
+    <title>Raspberry Pi gateway: always-on, hardened, and unprivileged</title>
+    <rect class="homelab-box" x="410" y="35" width="330" height="215" rx="12"></rect>
+    <text class="homelab-heading" x="575" y="66">
+      <tspan x="575" dy="0">Raspberry Pi gateway</tspan>
+      <tspan x="575" dy="24">(hardened)</tspan>
+    </text>
+    <text class="homelab-item" x="448" y="138">• always-on agents</text>
+    <text class="homelab-item" x="448" y="178">• isolated service user</text>
+  </a>
+
+  <path class="homelab-link" d="M350 128 H410"></path>
+  <a class="diagram-node homelab-node n-3" href="/projects/homelab/#system">
+    <title>Mesh VPN: the private overlay between both gateways</title>
+    <rect class="homelab-box homelab-emphasis" x="310" y="105" width="140" height="46" rx="23"></rect>
+    <text class="homelab-accent-label" x="380" y="134">mesh VPN</text>
+  </a>
+
+  <path class="homelab-alert" d="M185 198 V270 H130 V288"></path>
+  <a class="diagram-node homelab-node n-6" href="/projects/homelab/#outcome">
+    <title>Telegram alerts: where the spend tripwire pages me</title>
+    <rect class="homelab-box homelab-emphasis" x="20" y="288" width="220" height="68" rx="12"></rect>
+    <text class="homelab-accent-label" x="130" y="329">Telegram alerts</text>
+  </a>
+
+  <path class="homelab-flow" d="M260 250 V390"></path>
+  <path class="homelab-flow" d="M575 250 V390"></path>
+  <a class="diagram-node homelab-node n-4" href="/projects/homelab/#redesign">
+    <title>Resilient LLM router: fallback chains, circuit breakers, and spend caps</title>
+    <rect class="homelab-box homelab-emphasis" x="70" y="390" width="620" height="112" rx="12"></rect>
+    <text class="homelab-heading" x="380" y="433">
+      <tspan x="380" dy="0">Resilient LLM router</tspan>
+      <tspan x="380" dy="28">fallback chains · circuit breakers · spend caps</tspan>
+    </text>
+  </a>
+
+  <path class="homelab-flow" d="M185 502 V575"></path>
+  <path class="homelab-flow" d="M315 502 V575"></path>
+  <path class="homelab-flow" d="M445 502 V575"></path>
+  <path class="homelab-flow" d="M575 502 V575"></path>
+
+  <a class="diagram-node homelab-node n-5" href="/projects/homelab/#redesign">
+    <title>Providers and local model: any provider can fail; the local model is the floor</title>
+    <rect class="homelab-box" x="120" y="575" width="130" height="72" rx="12"></rect>
+    <text class="homelab-label" x="185" y="618">Provider A</text>
+    <rect class="homelab-box" x="250" y="575" width="130" height="72" rx="12"></rect>
+    <text class="homelab-label" x="315" y="618">Provider B</text>
+    <rect class="homelab-box" x="380" y="575" width="130" height="72" rx="12"></rect>
+    <text class="homelab-label" x="445" y="618">…</text>
+    <rect class="homelab-box" x="510" y="575" width="130" height="72" rx="12"></rect>
+    <text class="homelab-label" x="575" y="618">Local model</text>
+  </a>
+</svg>

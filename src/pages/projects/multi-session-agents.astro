@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'An office of separate AI work sessions · Kenechi Ucheagwu';
+const description = 'Separate AI work sessions with a coordinator, browser ownership, checkpoint restore, a shared ledger and token budgets.';
+---
+
+<Base title={title} description={description} path="/projects/multi-session-agents/">
+  <header class="page-header page-header--lean">
+    <div class="shell">
+      <h1>An office of separate AI work sessions</h1>
+      <p class="subtitle project-status">in production · checkpoint adoption by session</p>
+      <p class="case-lede">I cover several office jobs, and a long agent conversation could lose its place after context compaction. Re-reading the whole history also consumed usage. I split the work into standing sessions with defined roles, then built a way for them to recover context and hand work to each other.</p>
+    </div>
+  </header>
+
+  <article class="article article--lean shell">
+    <section class="article-section" id="roles">
+      <h2>Work and coordination</h2>
+      <p>Each work session has one role, its own browser and its own share of the task ledger. A coordinator routes work, gathers questions into a list for me, and relays my answers in my exact words. It stays out of the work assigned to those sessions.</p>
+      <p>A lease system keeps two sessions from driving the same browser at once, and a keep-alive helper touches only its own tab. Routine updates go into a shared status log without names or identifiers; direct messages are reserved for decisions, deadlines and blockers.</p>
+    </section>
+
+    <section class="article-section" id="restore">
+      <h2>Recovering the working state</h2>
+      <p>A checkpoint is a small, schema-checked file with approval entries. Writes take an exclusive lock and require the run number the caller last saw, so an older session cannot silently replace newer state. A takeover needs a recorded reason.</p>
+      <p>A startup hook restores context after startup, resume, clear or compaction. Restores are logged, and the token rules return with the checkpoint. Adoption is session by session. A SQLite ledger holds unattended handoffs; a relay delivers them to the owning session and records whether they were sent, reminded, stuck or unmapped.</p>
+    </section>
+
+    <section class="article-section" id="budgets">
+      <h2>Budgets and human decisions</h2>
+      <p>I give sessions weekly token budgets and keep a reserve that only I release. Pace checks trigger a soft stop before the weekly limit. At high usage, work continues only when I name it. Safety checks are retained even when the budget is tight.</p>
+      <p>The coordinator can resolve familiar, reversible decisions. I retain global claim submission, sends, sign-ins, two-factor authentication and irreversible changes. An outbound message needs approval in the session that will send it.</p>
+    </section>
+
+    <section class="article-section" id="result">
+      <h2>Result</h2>
+      <p>A review of one week of usage found that re-reading cached context was 74.8% of it. Moving the big sessions to a smaller context window with checkpoints cut the context sent on each call from about 460,000-540,000 tokens to about 180,000-200,000. The review estimates usage would have been 34.5% lower if every big session had run that way all week. 345 automated tests cover the checkpoint, ledger, lease, relay and browser code.</p>
+    </section>
+
+    <section class="article-section" id="lessons">
+      <h2>Lessons</h2>
+      <p>The usage review showed how much repeated context reading and session-to-session messaging cost. I moved routine updates to the shared log and used checkpoints to carry working state forward. That made context recovery part of the system's design, rather than something each session had to reconstruct from a long chat.</p>
+    </section>
+
+    <section class="article-section" id="next">
+      <h2>What's next</h2>
+      <p>Sessions adopt checkpoints one at a time. Moving the remaining sessions over is the next step.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2>Stack</h2>
+      <p>Claude Code sessions and startup hooks, Python command-line tools, SQLite, Playwright MCP, PowerShell, and local notes and handoffs.</p>
+    </section>
+  </article>
+</Base>

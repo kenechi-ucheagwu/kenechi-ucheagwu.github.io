@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import { readFileSync } from 'node:fs';
+
+const title = 'From the vitals monitor to the chart, hands-free · Kenechi Ucheagwu';
+const description = 'A case study on bridging a vitals monitor to an EHR with HL7, MLLP, strict unit handling, deduplication, and a durable outbox.';
+const vitalsDiagram = readFileSync(new URL('../../../public/diagrams/vitals-bridge.svg', import.meta.url), 'utf8');
+---
+
+<Base title={title} description={description} path="/projects/vitals-bridge/">
+  <header class="page-header" id="monitor">
+    <div class="shell">
+      <h1>From the vitals monitor to the chart, hands-free</h1>
+      <p class="subtitle project-status">prototype</p>
+      <p class="case-lede">Every visit at the clinic starts with vitals on a Welch Allyn Connex monitor. Then a medical assistant reads the screen and types the numbers into the chart. Transcription is slow and occasionally wrong, and the monitor has known how to speak a standard clinical protocol since before I worked here. Nobody had ever plugged it in.</p>
+    </div>
+  </header>
+
+  <article class="article article--path shell">
+    <section class="article-section" id="path">
+      <h2><span class="section-count" aria-hidden="true">01</span><span>The path the data takes</span></h2>
+      <div class="diagram-wrap vitals-diagram-wrap">
+        <div class="diagram diagram-inline" tabindex="0" aria-label="Scrollable vitals bridge data-path diagram" set:html={vitalsDiagram}>
+        </div>
+        <p class="diagram-caption">
+          <span class="cap-default">hover a stage · click to jump</span>
+          <span class="cap cap-1">speaks a proprietary protocol; can't talk to the EHR directly</span>
+          <span class="cap cap-2">the free piece the sales path doesn't mention</span>
+          <span class="cap cap-3">parse, validate units, dedup, commit to outbox, then ACK</span>
+          <span class="cap cap-4">strict contracts; no chart-number lookup, so the bridge keeps its own map</span>
+          <span class="cap cap-5">human-confirmed fallback, same client underneath</span>
+        </p>
+      </div>
+      <p class="diagram-link"><a href="/diagrams/vitals-bridge.svg">Open full size</a></p>
+      <p>The monitor speaks a proprietary vendor protocol over the LAN to a free vendor translator service, which re-emits each reading as an HL7 ORU^R01 result message over MLLP, healthcare's ancient TCP framing protocol. My bridge service listens there: it unwraps the MLLP frames, parses the ORU message, maps the IEEE 11073 device codes to chart fields, converts units, and posts the vitals to the EHR's API against the right patient. There's also a fallback path for days when hardware misbehaves: a tablet page on the clinic LAN where the assistant confirms captured values, feeding the same client.</p>
+    </section>
+
+    <section class="article-section" id="hard-parts">
+      <h2><span class="section-count" aria-hidden="true">02</span><span>What made it hard</span></h2>
+      <p>Three things. First, the protocol chain: the device side is proprietary, so the free vendor translator is the only sane entry point, and its HL7 output is defined by a vendor interface spec, not by anything you can guess. Second, the EHR's API has real-world edges: no patient lookup by chart number, so the bridge keeps its own local mapping; strict field contracts; and values that must arrive as strings with exact unit conventions. Third, clinical data deserves paranoia: readings without an explicit unit are dropped rather than assumed, every message is deduplicated on its control ID, and the bridge commits each reading to a local outbox database before acknowledging the monitor, so a crash can't silently eat a blood pressure.</p>
+    </section>
+
+    <section class="article-section" id="licensing">
+      <h2><span class="section-count" aria-hidden="true">03</span><span>The licensing detective work</span></h2>
+      <p>The vendor's sales path for 'EMR connectivity' leads to central-station middleware that costs about as much as a car. The actual requirement, buried in support documentation, is a free translator download plus, at most, a per-device network license that many units already ship with. Reading interface specs and licensing matrices for an afternoon saved the clinic a five-figure quote.</p>
+    </section>
+
+    <section class="article-section" id="status">
+      <h2><span class="section-count" aria-hidden="true">04</span><span>Where it stands</span></h2>
+      <p>The bridge is built, reviewed, and green: 65 tests across the HL7 parser, the MLLP server, the EHR client, and the capture fallback. It is not live yet: go-live waits on the vendor's confirmation of the device license, EHR API access, and choosing a host machine on the clinic network. A go-live runbook and install scripts are written and waiting.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2><span class="section-count" aria-hidden="true">05</span><span>Stack</span></h2>
+      <p>Python, an MLLP/TCP server, a hand-rolled HL7 v2 parser, SQLite for the outbox, a REST client with a dry-run mode, and a small Flask page for the capture fallback.</p>
+    </section>
+  </article>
+</Base>

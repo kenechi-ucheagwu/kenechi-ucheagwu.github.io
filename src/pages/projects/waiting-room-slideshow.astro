@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Building a waiting-room video loop · Kenechi Ucheagwu';
+const description = 'A scripted HTML-to-video pipeline for branded waiting-room slides, delivered to USB for a playback pilot.';
+---
+
+<Base title={title} description={description} path="/projects/waiting-room-slideshow/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Building a waiting-room video loop</h1>
+      <p class="subtitle project-status">pilot · delivered to USB</p>
+      <p class="case-lede">I built a 1080p video loop for the clinic's waiting room, with current information about services, checkups, coverage renewal and accepted plans. The USB copy is delivered. Playback on the waiting-room TV has not been confirmed, so this is still a pilot.</p>
+    </div>
+  </header>
+
+  <article class="article article--path shell">
+    <section class="article-section" id="problem">
+      <h2>The problem</h2>
+      <p>Patients in the waiting room needed current information: telehealth, checkups, state coverage renewal and which plans we accept. The plan list had to show only plans with direct evidence of participation.</p>
+    </section>
+
+    <section class="article-section" id="build">
+      <h2>From HTML to a video file</h2>
+      <ol>
+        <li><strong>Lay out the slides.</strong> I chose bold color fields from rendered style samples. Each slide is HTML and CSS, with original SVG icons.</li>
+        <li><strong>Check the frame.</strong> Playwright renders through Chromium. The script checks elements against a TV safe area and flags overflow before rendering.</li>
+        <li><strong>Render motion.</strong> A JavaScript seek function sets animation state for each captured frame. ffmpeg encodes the clips and joins them with crossfades.</li>
+        <li><strong>Close the loop.</strong> A matching tail frame removes the jump back to the start. The build also produces a contact sheet for sign-off.</li>
+      </ol>
+    </section>
+
+    <section class="article-section" id="content">
+      <h2>Content that can be maintained</h2>
+      <p>The slides cover a welcome, telehealth, primary care, checkups, insurance and state coverage renewal. An accepted plan appears only with direct evidence of participation. QR codes point to the practice website and the state's renewal page.</p>
+      <p>To update the loop, I edit the slide functions or plan list, rebuild, and copy the USB output folder to the stick. The TV side needs no network connection.</p>
+    </section>
+
+    <section class="article-section" id="delivery">
+      <h2>Delivery and the remaining check</h2>
+      <p>The output includes the main MP4, a lower-resolution fallback and JPGs in a flat USB folder with short filenames. That gives the playback pilot alternatives to try without rebuilding the content. Delivery is complete; the remaining check is playback on the actual TV.</p>
+      <p>The build only produces files. I review the contact sheet before anything goes on the stick.</p>
+    </section>
+
+    <section class="article-section" id="next">
+      <h2>What's next</h2>
+      <p>The loop was delivered on USB on October 1, 2026. Next is confirming playback on the waiting-room TV, using the fallback files if the main MP4 doesn't play.</p>
+    </section>
+
+    <section class="article-section" id="stack">
+      <h2>Stack</h2>
+      <p>Python, Playwright with Chromium, Pillow, ffmpeg, Bricolage Grotesque from Google Fonts, and qrcode-generator.</p>
+    </section>
+  </article>
+</Base>
