@@ -11,7 +11,7 @@ interface Props {
 
 const { title, description, path, personJsonLd = false, noIndex = false } = Astro.props;
 const canonicalUrl = new URL(path, Astro.site);
-const ogImage = new URL('/og-image.png', Astro.site);
+const ogImage = new URL('/og-image-v2.png', Astro.site);
 const isHome = path === '/';
 const isProject = path.startsWith('/projects/');
 const isAbout = path === '/about/';
