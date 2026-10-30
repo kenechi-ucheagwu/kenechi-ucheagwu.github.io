@@ -13,8 +13,6 @@
   --diagram-flow: #607873;
   --button-bg: #0a5f58;
   --button-text: #ffffff;
-  --todo-bg: #fff0a8;
-  --todo-text: #4a3500;
   --header-h: 4.25rem;
   --max: 74rem;
   --font-display: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
@@ -41,8 +39,6 @@
   --diagram-flow: #8fa7a1;
   --button-bg: #5eead4;
   --button-text: #08231f;
-  --todo-bg: #66520a;
-  --todo-text: #fff2a8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -61,8 +57,6 @@
     --diagram-flow: #8fa7a1;
     --button-bg: #5eead4;
     --button-text: #08231f;
-    --todo-bg: #66520a;
-    --todo-text: #fff2a8;
   }
 }
 
@@ -587,12 +581,70 @@ main {
   font-size: 0.78rem;
 }
 
-mark.todo {
-  padding: 0.08em 0.3em;
-  background: var(--todo-bg);
-  color: var(--todo-text);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+.work-label {
+  display: inline-block;
+  width: fit-content;
+  margin: 1.1rem 0 0;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--accent-strong);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.work-label--demo {
+  border-style: dashed;
+  border-color: var(--muted);
+  background: var(--surface-shift);
+  color: var(--text);
+}
+
+.transcript {
+  margin: 1.25rem 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  background: var(--surface-shift);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.guard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.guard-table th,
+.guard-table td {
+  padding: 0.75rem 1rem 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.guard-table thead th {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.guard-table tbody th {
+  width: 38%;
+  font-weight: 700;
+}
+
+.transcript:focus-visible,
+.table-wrap:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
 }
 
 #projects {

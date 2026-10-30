@@ -1,0 +1,95 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const title = 'Billing automation that stops itself · Kenechi Ucheagwu';
+const description = 'Open source with synthetic data: billing changes behind a dry run, a small approved first batch, a check after every change, circuit breakers and a human submit.';
+
+const guards = [
+  ['Dry run by default', 'Surprises. Every planned change is shown before anything is written.'],
+  ['A first batch of 3 to 5, then a named approval', 'A bad rule hitting the whole queue. A person checks the first few claims and approves the run by name.'],
+  ['Re-read before and after every write', 'Writing over someone else\'s edit, and a save that reports success but keeps the old value.'],
+  ['Hash-chained audit log', 'Quiet edits to the record. Changing, deleting or reordering an earlier line breaks the chain.'],
+  ['Circuit breakers', 'Runaway failures. The run stops after 3 failures in a row, 5 in one run, any unexpected state, or a plan over 50 changes.'],
+  ['No submit handle', 'The tool sending claims to a payer. The final submit stays a person\'s click.'],
+  ['Member IDs masked', 'IDs spilling into output and logs. Only the last two characters print.'],
+];
+
+const transcript = `$ billing-guard resume flaky.sandbox run-29aefb8dc269
+CLM-0001  member_id              *********33 -> *********97  stale_member_id             APPLIED_VERIFIED
+...
+CLM-0004  rendering_provider_id      (empty) -> PRV-06       missing_rendering_provider  APPLIED_VERIFIED
+CLM-0005  member_id              *********93 -> *********17  stale_member_id             WRITE_FAILED
+CLM-0005  rendering_provider_id      (empty) -> PRV-08       missing_rendering_provider  WRITE_FAILED
+CLM-0007  member_id              *********05 -> *********26  stale_member_id             WRITE_FAILED
+CLM-0007  rendering_provider_id      (empty) -> PRV-03       missing_rendering_provider  SKIPPED_BREAKER_OPEN
+...
+run-29aefb8dc269 STOPPED_BY_BREAKER: 5 of 12 changes applied and verified, 3 failures, 4 not applied. 4 claims fully fixed.
+Reason: consecutive failure limit.
+Next: fix the cause, then plan again. Nothing after the stop was touched.`;
+---
+
+<Base title={title} description={description} path="/projects/billing-automation-showcase/">
+  <header class="page-header">
+    <div class="shell">
+      <h1>Billing automation that stops itself</h1>
+      <p class="work-label work-label--demo">Open source, synthetic data</p>
+      <p class="case-lede">When software changes records in a billing system, it should stop itself before a small mistake becomes a big one. This is a from-scratch public version of the guards I put around billing automation at work.</p>
+    </div>
+  </header>
+
+  <article class="article shell">
+    <section class="article-section" id="problem">
+      <h2><span class="section-count" aria-hidden="true">01</span><span>The problem</span></h2>
+      <div>
+        <p>Automation that writes to an EHR or a billing queue can repeat a change, fail without saying so, or break when the screen layout changes. A save can report success and keep the old value. A biller can edit the same claim while the script is working. A rule with a bug can decide that hundreds of claims need the same change.</p>
+        <p>None of this shows up when you try a script on a handful of claims that behave. This demo runs against a mock EHR that can inject each of these faults, so the tests can show the guards catching them.</p>
+      </div>
+    </section>
+
+    <section class="article-section" id="guards">
+      <h2><span class="section-count" aria-hidden="true">02</span><span>The guards</span></h2>
+      <div class="table-wrap" tabindex="0" aria-label="Guards and what each one prevents">
+        <table class="guard-table">
+          <thead>
+            <tr><th scope="col">Guard</th><th scope="col">What it prevents</th></tr>
+          </thead>
+          <tbody>
+            {guards.map(([guard, prevents]) => (
+              <tr><th scope="row">{guard}</th><td>{prevents}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="article-section" id="guard-fires">
+      <h2><span class="section-count" aria-hidden="true">03</span><span>Watch a guard fire</span></h2>
+      <div>
+        <p>In the "flaky" scenario, the mock service starts failing partway through a run. After three failures in a row, the breaker stops the run and leaves everything after it alone. Member IDs print masked.</p>
+        <pre class="transcript" tabindex="0" aria-label="Terminal output from the flaky scenario" set:text={transcript}></pre>
+        <p>In the "silent drop" scenario, the mock says the first claim saved but keeps the old values. The read-back catches it, and the first batch can't be approved. In the "drift" scenario, another user edits a claim just before the tool writes to it, and the run stops on that claim without writing.</p>
+      </div>
+    </section>
+
+    <section class="article-section" id="result">
+      <h2><span class="section-count" aria-hidden="true">04</span><span>Result</span></h2>
+      <div>
+        <p>103 tests pass on Ubuntu and Windows across three Python versions, with no third-party dependencies. CI also runs <a href="/projects/phi-guardrails/">phi-guardrails</a> over the repository's own history.</p>
+        <p>The same guard rules run on the billing tools I built at the practice. This demo is a standalone version written from scratch against a mock, with none of the practice's code or data.</p>
+      </div>
+    </section>
+
+    <section class="article-section" id="limits">
+      <h2><span class="section-count" aria-hidden="true">05</span><span>Limits</span></h2>
+      <p>The EHR here is a mock, and a real system needs its own adapter. Approval is a name typed on the command line, not a sign-in. It handles one operator at a time. It shows an engineering pattern and is not a compliance program.</p>
+    </section>
+
+    <section class="article-section" id="links">
+      <h2><span class="section-count" aria-hidden="true">06</span><span>Links</span></h2>
+      <div class="link-row" aria-label="Project links">
+        <a href="https://github.com/kenechi-ucheagwu/billing-automation-showcase">Code on GitHub</a>
+        <a href="https://github.com/kenechi-ucheagwu/billing-automation-showcase#quick-start">Quick start</a>
+      </div>
+    </section>
+  </article>
+</Base>
