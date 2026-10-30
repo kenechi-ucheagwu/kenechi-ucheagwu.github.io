@@ -1,6 +1,6 @@
 <svg class="architecture-diagram homelab-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760" width="760" height="760" aria-labelledby="homelab-title homelab-desc" preserveAspectRatio="xMidYMid meet">
   <title id="homelab-title">Self-hosted agent homelab architecture</title>
-  <desc id="homelab-desc">Interactive nodes show a workstation gateway and hardened Raspberry Pi gateway connected over a mesh VPN, routing model requests through shared safeguards, and sending spend alerts to Telegram.</desc>
+  <desc id="homelab-desc">Interactive nodes show a workstation gateway and hardened Raspberry Pi gateway connected over a mesh VPN, routing model requests through shared safeguards, and sending spend alerts to my phone.</desc>
   <style>
     .homelab-diagram {
       --diagram-text: #172321;
@@ -162,9 +162,9 @@
 
   <path class="homelab-alert" d="M185 198 V270 H130 V288"></path>
   <a class="diagram-node homelab-node n-6" href="/projects/homelab/#outcome">
-    <title>Telegram alerts: where the spend tripwire pages me</title>
+    <title>Phone alerts: where the spend tripwire pages me</title>
     <rect class="homelab-box homelab-emphasis" x="20" y="288" width="220" height="68" rx="12"></rect>
-    <text class="homelab-accent-label" x="130" y="329">Telegram alerts</text>
+    <text class="homelab-accent-label" x="130" y="329">phone alerts</text>
   </a>
 
   <path class="homelab-flow" d="M260 250 V390"></path>

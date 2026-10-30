@@ -12,7 +12,7 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
     <div class="shell">
       <h1>A homelab that pages itself</h1>
       <p class="subtitle">Self-hosted AI agents with SRE guardrails</p>
-      <p class="case-lede">Outside work I run a small fleet of self-hosted AI agents on an always-on Windows workstation, with a hardened Raspberry Pi handling infrastructure, connected over a mesh VPN. They triage my email, file notes into my knowledge base, watch tech news, draft routine documents, and keep each other healthy. It started as a convenience project and turned into the best systems education I've had. One boundary is non-negotiable: this fleet runs my personal automation only. Nothing from my employer's systems runs through it.</p>
+      <p class="case-lede">Outside work I run self-hosted automation on an always-on Windows workstation, with a Raspberry Pi 5 as the infrastructure node, connected over Tailscale. At its peak the agent fleet triaged my email, filed notes into my knowledge base, watched tech news and kept the other agents healthy. It started as a convenience project and turned into the best systems education I've had. One boundary holds throughout: the agents on this page run my personal automation only, and practice work stays in separate tooling with its own controls.</p>
     </div>
   </header>
 
@@ -79,29 +79,30 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
 
     <section class="article-section" id="redesign">
       <h2><span class="section-count" aria-hidden="true">03</span><span>The redesign</span></h2>
-      <p>The fix was not a smarter agent. It was dumber safeguards. Loop detection with a circuit breaker now sits at the gateway. A deterministic spend tripwire reads the usage database every 15 minutes and alerts on rolling-window thresholds; there is deliberately no LLM anywhere in the alert path, because a watchdog must not be able to fail the same way as the thing it watches. Providers that trip quota or spend limits get benched automatically, and the whole fleet routes around them through shared health state. Same lesson as my billing pipeline at work: let the model do the flexible part, and surround it with boring, testable enforcement.</p>
+      <p>The fix was not a smarter agent. It was dumber safeguards. Loop detection with a circuit breaker went in at the gateway. A deterministic spend tripwire read the usage database every 15 minutes and alerted on rolling-window thresholds; there was deliberately no LLM anywhere in the alert path, because a watchdog must not be able to fail the same way as the thing it watches. Providers that tripped quota or spend limits were benched automatically, and the whole fleet routed around them through shared health state. Same lesson as my automation at work: let the model do the flexible part, and surround it with boring, testable enforcement.</p>
       <p>The design goal: any single provider can be down, rate-limited, or benched without stopping the fleet.</p>
     </section>
 
     <section class="article-section" id="runs-today">
       <h2><span class="section-count" aria-hidden="true">04</span><span>What runs today</span></h2>
-      <p>The scheduled fleet includes an IT-ops agent that runs every 15 minutes with tiered auto-fixes (snapshot, apply, verify, roll back on failure, two strikes then escalate to me), a medic agent that patches the other agents with test-gated commits and reverts anything that fails, a librarian that files knowledge into my vaults, and mail and calendar triage. A usage dashboard aggregates every token and dollar across 9 sources into one SQLite-backed view.</p>
-      <p>The Pi itself: key-only SSH, fail2ban, a default-deny firewall, automatic security updates, and services split across unprivileged users.</p>
-      <p><strong>Where it stands now (October 2026).</strong> The fleet has since been simplified. The agents run on the always-on workstation, and the Pi is an infrastructure node only: VPN routing, a watchdog, and backups, with no agents on it. Model use moved to two subscription plans with no pay-per-token API lane at all, which removes the runaway-spend failure mode this page is about. The local model's only job now is building search embeddings for my knowledge base.</p>
-      <p>Auto-fix with a receipt. The ops agent can restart services and clean stale state on its own, but every action is snapshotted, verified, rolled back on failure, and logged to an audit trail. Automation you can't audit is just a faster way to break things.</p>
+      <p><strong>Where it stands now (October 2026).</strong> I simplified the fleet. The agents run on the always-on workstation, and the Pi is an infrastructure node with no agents on it. Model use moved to two subscription plans with no pay-per-token API lane at all, which removes the runaway-spend failure this page is about. The local model's only job now is building search embeddings for my knowledge base.</p>
+      <p>The workstation runs an IT-ops agent every 30 minutes with tiered auto-fixes: snapshot, apply, verify, roll back on failure, and after two strikes escalate to me. Every action it takes is logged to an audit trail. A daily brief replaced seven separate notification streams. A Flask dashboard pulls token use from 9 sources into SQLite and serves it on the workstation only. I retired or paused the other agents as I simplified.</p>
+      <p>Phone alerts go through a Web Push hub I host myself: a small Python service and a PWA that fan each alert out to every subscribed phone. It listens on localhost and is reachable only over the tailnet, never the public internet.</p>
+      <p>The Raspberry Pi 5 is a Tailscale exit node with key-only SSH, fail2ban, a firewall that denies incoming traffic by default and automatic security updates. A systemd watchdog checks reachability every 2 minutes and records only state changes. The Pi is also where two of my knowledge vaults are backed up: nightly encrypted restic snapshots over SFTP across Tailscale, a weekly integrity check that reads a sample of the stored data, and a restore I've tested.</p>
     </section>
 
     <section class="article-section" id="stack">
       <h2><span class="section-count" aria-hidden="true">05</span><span>Stack</span></h2>
-      <p>Python, PowerShell, and Bash; systemd and Windows scheduled tasks; SQLite; a mesh VPN; Claude and Codex on subscription plans; a local embedding model via Ollama for knowledge-base search.</p>
+      <p>Python, PowerShell, and Bash; systemd and Windows scheduled tasks; SQLite and Flask; Tailscale; restic; Web Push with a PWA; Claude and Codex on subscription plans; a local embedding model via Ollama for knowledge-base search.</p>
     </section>
 
     <section class="article-section" id="outcome">
       <h2><span class="section-count" aria-hidden="true">06</span><span>Outcome</span></h2>
       <ul>
-        <li>The spend tripwire polls every 15 minutes, so runaway spend is now bounded to one polling window instead of unbounded.</li>
-        <li>Running today: two gateways, a dozen scheduled agents, and one dashboard aggregating token spend across 9 usage sources.</li>
-        <li>Alerting consolidated: seven separate notification streams collapsed into one daily fleet brief.</li>
+        <li>While a pay-per-token lane existed, the tripwire bounded runaway spend to one 15-minute polling window. Today there is no pay-per-token lane at all.</li>
+        <li>Alerting consolidated: seven notification streams became one daily brief, and phone alerts moved to a self-hosted Web Push hub.</li>
+        <li>Nightly encrypted backups to the Pi, with a weekly integrity check and a tested restore.</li>
+        <li>One dashboard tracking token use across 9 sources.</li>
       </ul>
     </section>
 
