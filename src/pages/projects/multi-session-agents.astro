@@ -33,6 +33,12 @@ const description = 'Separate AI work sessions with a coordinator, browser owner
       <p>The coordinator can resolve familiar, reversible decisions. I retain global claim submission, sends, sign-ins, two-factor authentication and irreversible changes. An outbound message needs approval in the session that will send it.</p>
     </section>
 
+    <section class="article-section" id="browser-lanes">
+      <h2>Browser lanes</h2>
+      <p>Browser calls started hanging for up to 30 minutes. I traced it to a single tab whose page never finished loading. Every Playwright call lists the open tabs, so that one tab blocked calls aimed at every other tab, while a plain health check still answered in milliseconds and missed it. A preflight check, a helper that closes stuck tabs and 90-second tool timeouts brought calls down to about 1.2 seconds.</p>
+      <p>Later I found every session starting its own copy of every browser server: 224 node processes using about 16.5 GB of memory. I replaced them with one shared server per lane under a small supervisor, which cut that to 13 processes using about 840 MB.</p>
+    </section>
+
     <section class="article-section" id="result">
       <h2>Result</h2>
       <p>A review of one week of usage found that re-reading cached context was 74.8% of it. Moving the big sessions to a smaller context window with checkpoints cut the context sent on each call from about 460,000-540,000 tokens to about 180,000-200,000. The review estimates usage would have been 34.5% lower if every big session had run that way all week. 345 automated tests cover the checkpoint, ledger, lease, relay and browser code.</p>
