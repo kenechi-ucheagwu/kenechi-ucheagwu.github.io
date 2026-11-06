@@ -30,8 +30,8 @@ Then open http://localhost:4321. `npm run build` writes the static site to `dist
 - `src/pages/`: the home, about and 404 pages, plus one page per case study under `projects/`.
 - `src/layouts/Base.astro`: the shared head, navigation and footer.
 - `src/styles/global.css`: all styles.
-- `public/`: diagrams, the share image and the resume PDF.
+- `public/`: diagrams and the share image.
 
 ## Rights
 
-Written content © Kenechi Ucheagwu, all rights reserved. No license is granted for the text, diagrams, images or resume.
+Written content © Kenechi Ucheagwu, all rights reserved. No license is granted for the text, diagrams or images.
