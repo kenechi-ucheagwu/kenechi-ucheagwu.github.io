@@ -1,16 +1,16 @@
 ---
 import Base from '../../layouts/Base.astro';
 
-const title = 'Verified handoffs between Claude and Codex · Kenechi Ucheagwu';
+const title = 'Verified handoffs between AI models · Kenechi Ucheagwu';
 const description = 'Worker dispatch, live status, verified results, cancellation and same-thread follow-up, with a local usage meter.';
 ---
 
 <Base title={title} description={description} path="/projects/ai-handoff-tooling/">
   <header class="page-header">
     <div class="shell">
-      <h1>Verified handoffs between Claude and Codex</h1>
+      <h1>Verified handoffs between AI models</h1>
       <p class="subtitle project-status">in production · job-store data gate is a staging prototype</p>
-      <p class="case-lede">I use Claude and Codex for bounded work, with a coordinator responsible for collecting the result. I built wrappers so that dispatch, status, cancellation and follow-up refer to the exact job. A worker saying it is done is only part of the evidence.</p>
+      <p class="case-lede">I hand bounded work to AI models from two model families, with a coordinator responsible for collecting the result. I built wrappers so that dispatch, status, cancellation and follow-up refer to the exact job. A worker saying it is done is only part of the evidence.</p>
     </div>
   </header>
 
@@ -41,12 +41,12 @@ const description = 'Worker dispatch, live status, verified results, cancellatio
 
     <section class="article-section" id="meter">
       <h2>A local usage meter</h2>
-      <p>The meter reads Codex rate-limit events from session logs and Claude status-line snapshots. For desktop usage, it estimates from transcript token counts anchored to the app's usage card. It writes pace and soft-stop flags atomically, without credentials, account API calls or model calls.</p>
+      <p>The meter reads one vendor's rate-limit events from session logs and the other's status-line snapshots. For desktop usage, it estimates from transcript token counts anchored to the app's usage card. It writes pace and soft-stop flags atomically, without credentials, account API calls or model calls.</p>
     </section>
 
     <section class="article-section" id="result">
       <h2>Result</h2>
-      <p>Through September 27, 2026, the wrappers ran 228 Codex jobs. Five died at launch; they now show as stale instead of hanging. About 47 leaked process trees led to the automatic cleanup above. 161 automated tests cover the live wrappers.</p>
+      <p>Through September 27, 2026, the wrappers ran 228 jobs. Five died at launch; they now show as stale instead of hanging. About 47 leaked process trees led to the automatic cleanup above. 161 automated tests cover the live wrappers.</p>
       <p>When a new model release came out, I benchmarked it against five other setups on four of my own tasks, with hidden tests and a code review seeded with known defects. Every setup passed, so cost decided it: the new model kept the same accuracy at about a third of the output tokens, and I changed routing on that result.</p>
     </section>
 
@@ -62,7 +62,7 @@ const description = 'Worker dispatch, live status, verified results, cancellatio
 
     <section class="article-section" id="stack">
       <h2>Stack</h2>
-      <p>PowerShell wrappers, Python bridges and verification, Node for broker shutdown, and the official Claude Code CLI and Codex plugin and CLI on subscription logins.</p>
+      <p>PowerShell wrappers, Python bridges and verification, Node for broker shutdown, and both vendors' official command-line tools and plugin on subscription logins.</p>
     </section>
   </article>
 </Base>
