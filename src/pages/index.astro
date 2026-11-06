@@ -1,8 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const title = 'Kenechi Ucheagwu | IT Operations & AI Automation';
-const description = 'IT operations, AI automation and security work in healthcare, with case studies and open-source code, by Kenechi Ucheagwu in Jersey City, NJ.';
+const title = 'Kenechi Ucheagwu | IT Operations & Medical Billing';
+const description = 'IT and billing work at a family-medicine practice, with case studies and open-source code, by Kenechi Ucheagwu in Jersey City, NJ.';
 ---
 
 <Base title={title} description={description} path="/" personJsonLd>
@@ -10,8 +10,8 @@ const description = 'IT operations, AI automation and security work in healthcar
     <div class="shell hero-grid">
       <div class="hero-copy">
         <h1>Kenechi Ucheagwu</h1>
-        <p class="hero-role">IT Operations & Systems Manager · Healthcare IT, Python automation, HIPAA-aware systems.</p>
-        <p class="lede">I run IT operations at a primary-care clinic: the network, the EHR (Elation, which I migrated us onto in January 2026), the security posture, and the billing systems that keep the lights on. Most of my recent work is Python automation around Elation and our payer portals: guarded billing-queue tools and eligibility checks, and before that an LLM-assisted medical coding pipeline wrapped in a deterministic validation layer. I'm also a nursing student, which means I understand the clinical workflows my systems serve, not just the servers they run on.</p>
+        <p class="hero-role">IT Operations & Systems Manager · Medical Biller & Coder · BSN student</p>
+        <p class="lede">I run IT and billing for a family-medicine practice in Jersey City, and I use AI to build tools for the front desk and billing office. Most of what I build is for work I've done myself: I started at the practice in 2017 as a medical assistant, and I'm still its only biller. In January 2026 I moved us from Amazing Charts to Elation. I'm also in nursing school (BSN, expected May 2027).</p>
         <div class="link-row" aria-label="Profile links">
           <a href="mailto:kacy.ucheagwu@gmail.com">Email</a>
           <a href="https://github.com/kenechi-ucheagwu">GitHub</a>
@@ -24,7 +24,7 @@ const description = 'IT operations, AI automation and security work in healthcar
           <p data-boot-line><span class="prompt">$</span> whoami</p>
           <p data-boot-line>it-ops · medical biller · bsn student</p>
           <p data-boot-line><span class="prompt">$</span> uptime</p>
-          <p data-boot-line>one clinic, five roles, since 2017</p>
+          <p data-boot-line>one clinic, three roles, since 2017</p>
           <p data-boot-line><span class="prompt">$</span> git log -1 billing-pipeline</p>
           <p data-boot-line>earlier work: llm proposed codes, 21 rules checked them</p>
           <p data-boot-line><span class="prompt">$</span> tail -1 lessons.log</p>
@@ -46,7 +46,7 @@ const description = 'IT operations, AI automation and security work in healthcar
           var replies = {
             help: "commands: whoami · uptime · status · rules · stack · incident · projects · contact · clear",
             whoami: "it-ops · medical biller · bsn student",
-            uptime: "one clinic, five roles, since 2017",
+            uptime: "one clinic, three roles, since 2017",
             status: "billing-pipeline: earlier work · llm proposed codes, 21 rules checked them, a human approved each claim",
             rules: "new-vs-established mismatch · age-band checks · date-of-service validity · modifier repair · ghost-line cleanup · +16 more",
             stack: "python · chrome devtools protocol · playwright · sqlite · powershell · astro",
@@ -134,7 +134,7 @@ const description = 'IT operations, AI automation and security work in healthcar
       <div class="stats">
         <div class="stat">
           <span class="stat-value">Jan 2026</span>
-          <span class="stat-label">led the clinic's EHR move from Amazing Charts to Elation, through cutover and staff training</span>
+          <span class="stat-label">moved the practice from Amazing Charts to Elation, then built a tool to recover the older records the import left out</span>
         </div>
         <div class="stat">
           <span class="stat-value">21</span>

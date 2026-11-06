@@ -1,6 +1,6 @@
 # kenechi-ucheagwu.github.io
 
-Source for [kenechi-ucheagwu.github.io](https://kenechi-ucheagwu.github.io), my portfolio: IT operations and AI automation in healthcare, with case studies and links to open-source code.
+Source for [kenechi-ucheagwu.github.io](https://kenechi-ucheagwu.github.io), my portfolio: IT and billing work at a family-medicine practice, with case studies and links to open-source code.
 
 The open-source projects it links to:
 - [billing-automation-showcase](https://github.com/kenechi-ucheagwu/billing-automation-showcase): guarded billing changes against a mock EHR that injects faults.
