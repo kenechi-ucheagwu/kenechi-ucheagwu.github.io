@@ -70,7 +70,7 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
           <span class="cap cap-3">private overlay between the two</span>
           <span class="cap cap-4">fallback chains, circuit breakers, spend caps</span>
           <span class="cap cap-5">any provider can fail; the local model is the floor</span>
-          <span class="cap cap-6">where the tripwire pages me</span>
+          <span class="cap cap-6">where the tripwire paged me</span>
         </p>
       </div>
       <p class="diagram-link">The diagram shows the setup at the time of the incident; "Where it stands now" below covers what changed since. <a href="/diagrams/homelab.svg">Open full size</a></p>
@@ -86,7 +86,7 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
     <section class="article-section" id="runs-today">
       <h2><span class="section-count" aria-hidden="true">04</span><span>What runs today</span></h2>
       <p><strong>Where it stands now (October 2026).</strong> I simplified the fleet. The agents run on the always-on workstation, and the Pi is an infrastructure node with no agents on it. Model use moved to two subscription plans with no pay-per-token API lane at all, which removes the runaway-spend failure this page is about. The local model's only job now is building search embeddings for my knowledge base.</p>
-      <p>The workstation runs an IT-ops agent every 30 minutes with tiered auto-fixes: snapshot, apply, verify, roll back on failure, and after two strikes escalate to me. Every action it takes is logged to an audit trail. A daily brief replaced seven separate notification streams. A Flask dashboard pulls token use from 9 sources into SQLite and serves it on the workstation only. I retired or paused the other agents as I simplified.</p>
+      <p>Until October 30, the workstation ran an IT-ops agent every 30 minutes with tiered auto-fixes: snapshot, apply, verify, roll back on failure, and after two strikes escalate to me. Every action it took was logged to an audit trail. A daily brief replaced seven separate notification streams. A Flask dashboard pulls token use from up to 9 sources into SQLite and serves it on the workstation only. I retired or paused the other agents as I simplified.</p>
       <p>Phone alerts go through a Web Push hub I host myself: a small Python service and a PWA that fan each alert out to every subscribed phone. It listens on localhost and is reachable only over the tailnet, never the public internet.</p>
       <p>The Raspberry Pi 5 is a Tailscale exit node with key-only SSH, fail2ban, a firewall that denies incoming traffic by default and automatic security updates. A systemd watchdog checks reachability every 2 minutes and records only state changes. The Pi also holds encrypted off-machine backups of two of my knowledge vaults, made with restic over SFTP across Tailscale.</p>
     </section>
@@ -102,7 +102,7 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
         <li>While a pay-per-token lane existed, the tripwire bounded runaway spend to one 15-minute polling window. Today there is no pay-per-token lane at all.</li>
         <li>Alerting consolidated: seven notification streams became one daily brief, and phone alerts moved to a self-hosted Web Push hub.</li>
         <li>Encrypted off-machine backups of my knowledge vaults to the Pi with restic.</li>
-        <li>One dashboard tracking token use across 9 sources.</li>
+        <li>One dashboard tracking token use from up to 9 sources.</li>
       </ul>
     </section>
 

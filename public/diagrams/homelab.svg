@@ -162,7 +162,7 @@
 
   <path class="homelab-alert" d="M185 198 V270 H130 V288"></path>
   <a class="diagram-node homelab-node n-6" href="/projects/homelab/#outcome">
-    <title>Phone alerts: where the spend tripwire pages me</title>
+    <title>Phone alerts: where the spend tripwire paged me</title>
     <rect class="homelab-box homelab-emphasis" x="20" y="288" width="220" height="68" rx="12"></rect>
     <text class="homelab-accent-label" x="130" y="329">phone alerts</text>
   </a>
