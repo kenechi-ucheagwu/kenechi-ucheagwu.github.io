@@ -79,7 +79,7 @@ const homelabDiagram = readFileSync(new URL('../../../public/diagrams/homelab.sv
 
     <section class="article-section" id="redesign">
       <h2><span class="section-count" aria-hidden="true">03</span><span>The redesign</span></h2>
-      <p>The fix was not a smarter agent. It was dumber safeguards. Loop detection with a circuit breaker went in at the gateway. A deterministic spend tripwire read the usage database every 15 minutes and alerted on rolling-window thresholds; there was deliberately no LLM anywhere in the alert path, because a watchdog must not be able to fail the same way as the thing it watches. Providers that tripped quota or spend limits were benched automatically, and the whole fleet routed around them through shared health state. Same lesson as my automation at work: let the model do the flexible part, and surround it with boring, testable enforcement.</p>
+      <p>The fix was not a smarter agent. It was dumber safeguards. Loop detection with a circuit breaker went in at the gateway. A deterministic spend tripwire read the usage database every 15 minutes and alerted on rolling-window thresholds; there was deliberately no LLM anywhere in the alert path, because a watchdog must not be able to fail the same way as the thing it watches. Providers that tripped quota or spend limits were benched automatically, and the whole fleet routed around them through shared health state. The lesson: let the model do the flexible part, and surround it with boring, testable enforcement.</p>
       <p>The design goal: any single provider can be down, rate-limited, or benched without stopping the fleet.</p>
     </section>
 
