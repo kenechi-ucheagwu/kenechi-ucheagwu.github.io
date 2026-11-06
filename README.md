@@ -34,4 +34,4 @@ Then open http://localhost:4321. `npm run build` writes the static site to `dist
 
 ## Rights
 
-No license is granted. The written content, diagrams, images and resume are all rights reserved.
+Written content © Kenechi Ucheagwu, all rights reserved. No license is granted for the text, diagrams, images or resume.
