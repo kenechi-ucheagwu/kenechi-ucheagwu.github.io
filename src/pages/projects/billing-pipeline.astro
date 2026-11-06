@@ -57,7 +57,7 @@ const billingDiagram = readFileSync(new URL('../../../public/diagrams/billing-pi
         <li>HIPAA first. Patient identifiers never entered source control or logs, the pipeline ran on clinic-controlled machines inside the clinic's own authenticated sessions, and nothing went out the door without human review.</li>
         <li>Solo operator: no second pair of eyes, so the process itself had to catch mistakes. Every script supported dry runs, ran a small batch of 3-5 before a full batch, and verified state after every mutation.</li>
         <li>A live EHR web app with real-world quirks and rate limits.</li>
-        <li>No budget. This replaced software that clinics twice our size pay five figures a year for.</li>
+        <li>No budget for commercial coding software.</li>
         <li>Test fixtures were synthetic, real patient data stayed out of the repo by design, and a pre-commit scan rejected known patient-data patterns as a backstop, one layer of several, not a guarantee.</li>
       </ul>
     </section>
