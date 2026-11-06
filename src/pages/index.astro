@@ -25,8 +25,6 @@ const description = 'IT and billing work at a family-medicine practice, with cas
           <p data-boot-line>it-ops · medical biller · bsn student</p>
           <p data-boot-line><span class="prompt">$</span> uptime</p>
           <p data-boot-line>one clinic, three roles, since 2017</p>
-          <p data-boot-line><span class="prompt">$</span> git log -1 billing-pipeline</p>
-          <p data-boot-line>earlier work: llm proposed codes, 21 rules checked them</p>
           <p data-boot-line><span class="prompt">$</span> tail -1 lessons.log</p>
           <p data-boot-line>watchdogs must be dumber than what they watch</p>
           <div class="terminal-log" role="log"></div>
@@ -44,11 +42,9 @@ const description = 'IT and billing work at a family-medicine practice, with cas
           if (!body || !form) return;
           var input = form.querySelector('input');
           var replies = {
-            help: "commands: whoami · uptime · status · rules · stack · incident · projects · contact · clear",
+            help: "commands: whoami · uptime · stack · incident · projects · contact · clear",
             whoami: "it-ops · medical biller · bsn student",
             uptime: "one clinic, three roles, since 2017",
-            status: "billing-pipeline: earlier work · llm proposed codes, 21 rules checked them, a human approved each claim",
-            rules: "new-vs-established mismatch · age-band checks · date-of-service validity · modifier repair · ghost-line cleanup · +16 more",
             stack: "python · chrome devtools protocol · playwright · sqlite · powershell · astro",
             incident: "jul 5: retry loop, $57 in one day. fix: loop breaker + a deterministic spend tripwire.",
           };
@@ -95,7 +91,7 @@ const description = 'IT and billing work at a family-medicine practice, with cas
             var out = document.createElement('p');
             out.className = 'term-x term-out';
             if (cmd === 'projects') {
-              var slugs = ['elation-billing-automation', 'billing-pipeline', 'homelab', 'phi-guardrails', 'billing-automation-showcase'];
+              var slugs = ['elation-billing-automation', 'homelab', 'phi-guardrails', 'billing-automation-showcase'];
               out.append('cd /projects → ');
               slugs.forEach(function (slug, i) {
                 var a = document.createElement('a');
@@ -137,12 +133,12 @@ const description = 'IT and billing work at a family-medicine practice, with cas
           <span class="stat-label">moved the practice from Amazing Charts to Elation, then built a tool to recover the older records the import left out</span>
         </div>
         <div class="stat">
-          <span class="stat-value">21</span>
-          <span class="stat-label">deterministic validation rules that screened every AI-coded claim in my coding pipeline</span>
+          <span class="stat-value">2017</span>
+          <span class="stat-label">started at the practice as a medical assistant, took over its billing in 2021 and moved into IT in 2022</span>
         </div>
         <div class="stat">
-          <span class="stat-value">172</span>
-          <span class="stat-label">claims coded, repaired, and shipped in one batch session</span>
+          <span class="stat-value">14</span>
+          <span class="stat-label">checks a claim goes through before it's queued, and I do the final review and submit</span>
         </div>
       </div>
     </div>
@@ -162,37 +158,31 @@ const description = 'IT and billing work at a family-medicine practice, with cas
           <a class="project-link" href="/projects/elation-billing-automation/">Read the case study</a>
         </article>
         <article class="project-card project-card--flagship">
-          <div class="project-meta"><span class="project-index">02</span><span class="project-tag">earlier work</span></div>
-          <h3>LLM-assisted medical coding pipeline</h3>
-          <p>An LLM proposed CPT and ICD-10 codes for clinic visits. A 21-rule validation layer flagged what it got wrong, and a human approved what it got right. Built solo for a primary-care clinic, driving Elation's web app.</p>
-          <a class="project-link" href="/projects/billing-pipeline/">Read the case study</a>
-        </article>
-        <article class="project-card project-card--flagship">
-          <div class="project-meta"><span class="project-index">03</span><span class="project-tag">personal project</span></div>
+          <div class="project-meta"><span class="project-index">02</span><span class="project-tag">personal project</span></div>
           <h3>Self-hosted AI agent homelab</h3>
           <p>Self-hosted automation on an always-on workstation, with a Raspberry Pi 5 as the infrastructure node over Tailscale: a Web Push alert hub and a Flask usage dashboard. Includes the $57 incident that taught me why watchdogs must be dumber than the things they watch.</p>
           <a class="project-link" href="/projects/homelab/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">04 · open source</span>
+          <span class="project-tag">03 · open source</span>
           <h3>PHI guardrails</h3>
           <p>Git hooks and a full-history scan that keep patient names and IDs out of code. Names and IDs are stored only as HMAC digests, so the guard never holds a readable patient list. 140 tests, synthetic data only.</p>
           <a class="project-link" href="/projects/phi-guardrails/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">05 · open source</span>
+          <span class="project-tag">04 · open source</span>
           <h3>Guarded billing automation demo</h3>
           <p>Billing changes against a mock EHR that injects faults: dry run by default, an approved first batch, a re-read around every write, circuit breakers and a hash-chained audit log. 103 tests, synthetic data only.</p>
           <a class="project-link" href="/projects/billing-automation-showcase/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">06 · in production</span>
+          <span class="project-tag">05 · in production</span>
           <h3>Refreshing the clinic website</h3>
           <p>I refreshed Urban Medical Center's service pages, booking and printable intake forms, with a hardened contact endpoint and shared accepted-plan copy.</p>
           <a class="project-link" href="/projects/clinic-website/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">07 · pilot · delivered to USB</span>
+          <span class="project-tag">06 · pilot · delivered to USB</span>
           <h3>Waiting-room video loop</h3>
           <p>I built a scripted pipeline from HTML slides to a 1080p loop, with safe-area checks, crossfades and USB output ready for a TV playback pilot.</p>
           <a class="project-link" href="/projects/waiting-room-slideshow/">Read the case study</a>
