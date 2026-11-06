@@ -96,7 +96,7 @@ const description = 'IT operations, AI automation and security work in healthcar
             var out = document.createElement('p');
             out.className = 'term-x term-out';
             if (cmd === 'projects') {
-              var slugs = ['elation-billing-automation', 'billing-pipeline', 'vitals-bridge', 'homelab', 'phi-guardrails', 'billing-automation-showcase'];
+              var slugs = ['elation-billing-automation', 'billing-pipeline', 'homelab', 'phi-guardrails', 'billing-automation-showcase'];
               out.append('cd /projects → ');
               slugs.forEach(function (slug, i) {
                 var a = document.createElement('a');
@@ -169,49 +169,43 @@ const description = 'IT operations, AI automation and security work in healthcar
           <a class="project-link" href="/projects/billing-pipeline/">Read the case study</a>
         </article>
         <article class="project-card project-card--flagship">
-          <div class="project-meta"><span class="project-index">03</span><span class="project-tag">prototype</span></div>
-          <h3>Vitals-monitor-to-EHR bridge</h3>
-          <p>A Welch Allyn vitals monitor, a free vendor translator, and a hand-built HL7/MLLP bridge designed to land readings in the chart without retyping. 65 tests green; showed that the vendor's central-station middleware wasn't needed.</p>
-          <a class="project-link" href="/projects/vitals-bridge/">Read the case study</a>
-        </article>
-        <article class="project-card project-card--flagship">
-          <div class="project-meta"><span class="project-index">04</span><span class="project-tag">personal project</span></div>
+          <div class="project-meta"><span class="project-index">03</span><span class="project-tag">personal project</span></div>
           <h3>Self-hosted AI agent homelab</h3>
           <p>Self-hosted automation on an always-on workstation, with a Raspberry Pi 5 as the infrastructure node over Tailscale: an IT-ops agent with tiered auto-fixes, a Web Push alert hub and a Flask usage dashboard. Includes the $57 incident that taught me why watchdogs must be dumber than the things they watch.</p>
           <a class="project-link" href="/projects/homelab/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">05 · open source</span>
+          <span class="project-tag">04 · open source</span>
           <h3>PHI guardrails</h3>
           <p>Git hooks and a full-history scan that keep patient names and IDs out of code. Names and IDs are stored only as HMAC digests, so the guard never holds a readable patient list. 140 tests, synthetic data only.</p>
           <a class="project-link" href="/projects/phi-guardrails/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">06 · open source</span>
+          <span class="project-tag">05 · open source</span>
           <h3>Guarded billing automation demo</h3>
           <p>Billing changes against a mock EHR that injects faults: dry run by default, an approved first batch, a re-read around every write, circuit breakers and a hash-chained audit log. 103 tests, synthetic data only.</p>
           <a class="project-link" href="/projects/billing-automation-showcase/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">07 · in production</span>
+          <span class="project-tag">06 · in production</span>
           <h3>Refreshing the clinic website</h3>
           <p>I refreshed Urban Medical Center's service pages, booking and printable intake forms, with a hardened contact endpoint and shared accepted-plan copy.</p>
           <a class="project-link" href="/projects/clinic-website/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">08 · in production</span>
+          <span class="project-tag">07 · in production</span>
           <h3>Separate AI work sessions</h3>
           <p>I split office work into sessions with defined roles, a coordinator, checkpoint restore, a shared status log and token budgets. Checkpoints cut per-call context by more than half.</p>
           <a class="project-link" href="/projects/multi-session-agents/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">09 · in production · gate in staging</span>
+          <span class="project-tag">08 · in production · gate in staging</span>
           <h3>Multi-model handoff tooling</h3>
           <p>Wrappers that count a job as done only when its result is verified, plus live status, cancellation, same-thread follow-up and a local usage meter.</p>
           <a class="project-link" href="/projects/ai-handoff-tooling/">Read the case study</a>
         </article>
         <article class="project-card project-card--secondary">
-          <span class="project-tag">10 · pilot · delivered to USB</span>
+          <span class="project-tag">09 · pilot · delivered to USB</span>
           <h3>Waiting-room video loop</h3>
           <p>I built a scripted pipeline from HTML slides to a 1080p loop, with safe-area checks, crossfades and USB output ready for a TV playback pilot.</p>
           <a class="project-link" href="/projects/waiting-room-slideshow/">Read the case study</a>
