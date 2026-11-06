@@ -681,7 +681,7 @@ main {
 }
 
 .project-card--flagship {
-  grid-column: span 6;
+  grid-column: span 4;
 }
 
 .project-card--secondary {
