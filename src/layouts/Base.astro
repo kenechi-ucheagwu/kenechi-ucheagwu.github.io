@@ -11,7 +11,7 @@ interface Props {
 
 const { title, description, path, personJsonLd = false, noIndex = false } = Astro.props;
 const canonicalUrl = new URL(path, Astro.site);
-const ogImage = new URL('/og-image-v2.png', Astro.site);
+const ogImage = new URL('/og-image-v3.png', Astro.site);
 const isHome = path === '/';
 const isProject = path.startsWith('/projects/');
 const isAbout = path === '/about/';
@@ -62,7 +62,7 @@ const person = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Kenechi Ucheagwu: IT operations and AI automation in healthcare" />
+    <meta property="og:image:alt" content="Kenechi Ucheagwu: IT and billing for a family-medicine practice, and the front-desk and billing tools I build" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
